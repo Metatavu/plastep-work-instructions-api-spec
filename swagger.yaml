@@ -398,6 +398,8 @@ components:
     Item:
       type: object
       description: Item object. Item describes single item/product that is produced
+      required:
+        - name
       properties:
         id:
           type: string
