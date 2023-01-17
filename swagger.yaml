@@ -332,6 +332,164 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/instructions:
+    get:
+      operationId: listInstructions
+      summary: Lists instructions.
+      description: Lists instructions.
+      tags:
+        - Instructions
+      parameters:
+        - name: page
+          in: query
+          description: Page number. Defaults to 0
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size. Defaults to 10
+          schema:
+            type: integer
+        - name: itemId
+          in: query
+          description: Filter by item id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of instructions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Instruction"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of instructions with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createInstruction
+      summary: Create a instruction.
+      description: Creates a new instruction.
+      tags:
+        - Instructions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Instruction"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created Instruction
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Instruction"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/instructions/{instructionId}:
+    get:
+      operationId: findInstruction
+      summary: Find a instruction.
+      description: Finds a instruction by id.
+      tags:
+        - Instructions
+      parameters:
+        - name: instructionId
+          required: true
+          in: path
+          description: instruction id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Instruction
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Instruction"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateInstruction
+      summary: Update a instruction.
+      description: Updates a instruction
+      tags:
+        - Instructions
+      parameters:
+        - name: instructionId
+          required: true
+          in: path
+          description: instruction id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Instruction"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Updated Instruction
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Instruction"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteInstruction
+      summary: Delete a instruction.
+      description: Deletes a instruction.
+      tags:
+        - Instructions
+      parameters:
+        - name: instructionId
+          required: true
+          in: path
+          description: instruction id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 components:
   securitySchemes:
     bearerAuth:
@@ -407,5 +565,37 @@ components:
         name:
           type: string
           description: Item of the item
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    Instruction:
+      type: object
+      description: Instruction object
+      required:
+        - productId
+        - responsiblePersons
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Instruction id in UUID format
+        productId:
+          type: string
+          format: uuid
+        responsiblePersons:
+          type: array
+          items:
+            type: string
+            format: email
+          description: List of emails where notifications related to modifications and suggestions should be sent. Must contain at least one email address.
+        revision:
+          type: number
+          format: int32
+          description: Revision
+        revisionApprovedDate:
+          type: string
+          format: date-time
+          description: Date time when current revision was approved
         metadata:
           $ref: "#/components/schemas/Metadata"
