@@ -174,6 +174,164 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/items:
+    get:
+      operationId: listItems
+      summary: Lists items.
+      description: Lists items.
+      tags:
+        - Items
+      parameters:
+        - name: page
+          in: query
+          description: Page number. Defaults to 0
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size. Defaults to 10
+          schema:
+            type: integer
+        - name: workSetId
+          in: query
+          description: Filter by workSetId
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Item"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of items with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createItem
+      summary: Create a item.
+      description: Creates a new item.
+      tags:
+        - Items
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Item"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created Item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/items/{itemId}:
+    get:
+      operationId: findItem
+      summary: Find a item.
+      description: Finds a item by id.
+      tags:
+        - Items
+      parameters:
+        - name: itemId
+          required: true
+          in: path
+          description: item id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateItem
+      summary: Update a item.
+      description: Updates a item
+      tags:
+        - Items
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Item"
+        description: Payload
+        required: true
+      parameters:
+        - name: itemId
+          required: true
+          in: path
+          description: item id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated Item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteItem
+      summary: Delete a item.
+      description: Deletes a item.
+      tags:
+        - Items
+      parameters:
+        - name: itemId
+          required: true
+          in: path
+          description: item id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 components:
   securitySchemes:
     bearerAuth:
@@ -234,5 +392,20 @@ components:
         name:
           type: string
           description: Work set name
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    Item:
+      type: object
+      description: Item object. Item describes single item/product that is produced
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Product id in UUID format
+        name:
+          type: string
+          description: Item of the item
         metadata:
           $ref: "#/components/schemas/Metadata"
