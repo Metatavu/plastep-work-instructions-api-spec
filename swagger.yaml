@@ -589,8 +589,8 @@ components:
           type: array
           items:
             type: string
-            format: email
-          description: List of emails where notifications related to modifications and suggestions should be sent. Must contain at least one email address.
+            format: uuid
+          description: List of keycloak user ID's to whom notifications related to modifications and suggestions should be sent. Must contain at least one user id.
         revision:
           type: number
           format: int32
