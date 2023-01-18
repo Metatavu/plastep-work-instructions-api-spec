@@ -174,13 +174,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/items:
+  /v1/products:
     get:
-      operationId: listItems
-      summary: Lists items.
-      description: Lists items.
+      operationId: listProducts
+      summary: Lists products.
+      description: Lists products.
       tags:
-        - Items
+        - Products
       parameters:
         - name: page
           in: query
@@ -200,19 +200,19 @@ paths:
             format: uuid
       responses:
         "200":
-          description: List of items
+          description: List of products
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Item"
+                  $ref: "#/components/schemas/Product"
           headers:
             X-Total-Count:
               schema:
                 type: integer
                 format: int64
-              description: Total count of items with given filters.
+              description: Total count of products with given filters.
         "default":
           description: Invalid request was sent to the server
           content:
@@ -220,25 +220,25 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
-      operationId: createItem
-      summary: Create a item.
-      description: Creates a new item.
+      operationId: createProduct
+      summary: Create a product.
+      description: Creates a new product.
       tags:
-        - Items
+        - Products
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Item"
+              $ref: "#/components/schemas/Product"
         description: Payload
         required: true
       responses:
         "200":
-          description: Created Item
+          description: Created Product
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Item"
+                $ref: "#/components/schemas/Product"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -246,28 +246,28 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/items/{itemId}:
+  /v1/products/{productId}:
     get:
-      operationId: findItem
-      summary: Find a item.
-      description: Finds a item by id.
+      operationId: findProduct
+      summary: Find a product.
+      description: Finds a product by id.
       tags:
-        - Items
+        - Products
       parameters:
-        - name: itemId
+        - name: productId
           required: true
           in: path
-          description: item id
+          description: product id
           schema:
             type: string
             format: uuid
       responses:
         "200":
-          description: Item
+          description: Product
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Item"
+                $ref: "#/components/schemas/Product"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -275,33 +275,33 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     put:
-      operationId: updateItem
-      summary: Update a item.
-      description: Updates a item
+      operationId: updateProduct
+      summary: Update a product.
+      description: Updates a product
       tags:
-        - Items
+        - Products
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Item"
+              $ref: "#/components/schemas/Product"
         description: Payload
         required: true
       parameters:
-        - name: itemId
+        - name: productId
           required: true
           in: path
-          description: item id
+          description: product id
           schema:
             type: string
             format: uuid
       responses:
         "200":
-          description: Updated Item
+          description: Updated Product
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Item"
+                $ref: "#/components/schemas/Product"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -309,16 +309,16 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     delete:
-      operationId: deleteItem
-      summary: Delete a item.
-      description: Deletes a item.
+      operationId: deleteProduct
+      summary: Delete a product.
+      description: Deletes a product.
       tags:
-        - Items
+        - Products
       parameters:
-        - name: itemId
+        - name: productId
           required: true
           in: path
-          description: item id
+          description: product id
           schema:
             type: string
             format: uuid
@@ -553,9 +553,9 @@ components:
         metadata:
           $ref: "#/components/schemas/Metadata"
 
-    Item:
+    Product:
       type: object
-      description: Item object. Item describes single item/product that is produced
+      description: Product object. Product describes single item/thing that is produced
       required:
         - name
       properties:
@@ -566,7 +566,7 @@ components:
           description: Product id in UUID format
         name:
           type: string
-          description: Item of the item
+          description: Name of the product
         metadata:
           $ref: "#/components/schemas/Metadata"
 
