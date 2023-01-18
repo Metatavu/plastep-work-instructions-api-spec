@@ -350,9 +350,9 @@ paths:
           description: Page size. Defaults to 10
           schema:
             type: integer
-        - name: itemId
+        - name: productId
           in: query
-          description: Filter by item id
+          description: Filter by product id
           schema:
             type: string
             format: uuid
