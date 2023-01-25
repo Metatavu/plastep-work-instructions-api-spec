@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   version: 1.0.0
-  title: Template API-spec
+  title: Plastep work instructions API-spec
 
 security:
   - bearerAuth: []
@@ -21,6 +21,158 @@ paths:
             text/plain:
               schema:
                 type: string
+
+  /v1/workSets:
+    get:
+      operationId: listWorkSets
+      summary: Lists work sets.
+      description: Lists work sets.
+      tags:
+        - WorkSets
+      parameters:
+        - name: page
+          in: query
+          description: Page number. Defaults to 0
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size. Defaults to 10
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of work sets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WorkSet"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of work sets with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createWorkSet
+      summary: Create a work set.
+      description: Creates a new work set.
+      tags:
+        - WorkSets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkSet"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created WorkSet
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkSet"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/workSets/{workSetId}:
+    get:
+      operationId: findWorkSet
+      summary: Find a work set.
+      description: Finds a work set by id.
+      tags:
+        - WorkSets
+      parameters:
+        - name: workSetId
+          required: true
+          in: path
+          description: work set id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: WorkSet
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkSet"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateWorkSet
+      summary: Update a work set.
+      description: Updates a work set
+      tags:
+        - WorkSets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkSet"
+        description: Payload
+        required: true
+      parameters:
+        - name: workSetId
+          required: true
+          in: path
+          description: work set id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated WorkSet
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkSet"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteWorkSet
+      summary: Delete a work set.
+      description: Deletes a work set.
+      tags:
+        - WorkSets
+      parameters:
+        - name: workSetId
+          required: true
+          in: path
+          description: work set id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
 components:
   securitySchemes:
@@ -42,3 +194,45 @@ components:
           format: int32
         message:
           type: string
+
+    Metadata:
+      type: object
+      description: Metadata object
+      properties:
+        creatorId:
+          type: string
+          format: uuid
+          description: ID of creator
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          description: Created date
+          readOnly: true
+        lastModifierId:
+          type: string
+          format: uuid
+          description: Id of last modifier
+          readOnly: true
+        modifiedAt:
+          type: string
+          format: date-time
+          description: Date modified
+          readOnly: true
+
+    WorkSet:
+      type: object
+      description: WorkSet object. WorkSet describes a single place where one or more phases are done.
+      required:
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Work set id in UUID format
+        name:
+          type: string
+          description: Work set name
+        metadata:
+          $ref: "#/components/schemas/Metadata"
