@@ -567,6 +567,10 @@ components:
         name:
           type: string
           description: Name of the product
+        workSetId:
+          type: string
+          format: uuid
+          description: Work set Id
         metadata:
           $ref: "#/components/schemas/Metadata"
 
