@@ -490,6 +490,199 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/instructions/{instructionId}/revisions:
+    get:
+      operationId: listRevisions
+      summary: Lists revisions.
+      description: Lists revisions.
+      tags:
+        - Revisions
+      parameters:
+        - name: page
+          in: query
+          description: Page number. Defaults to 0
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size. Defaults to 10
+          schema:
+            type: integer
+        - name: status
+          in: query
+          description: Filter by status
+          schema:
+            $ref: "#/components/schemas/RevisionStatus"
+        - name: instructionId
+          in: path
+          required: true
+          description: Instruction id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of revisions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Revision"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of revisions with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createRevision
+      summary: Create a revision.
+      description: Creates a new revision.
+      tags:
+        - Revisions
+      parameters:
+        - name: instructionId
+          in: path
+          required: true
+          description: Instruction id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Revision"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created Revision
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Revision"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/instructions/{instructionId}/revisions/{revisionId}:
+    get:
+      operationId: findRevision
+      summary: Find a revision.
+      description: Finds a revision by id.
+      tags:
+        - Revisions
+      parameters:
+        - name: instructionId
+          in: path
+          required: true
+          description: Instruction id
+          schema:
+            type: string
+            format: uuid
+        - name: revisionId
+          required: true
+          in: path
+          description: revision id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Revision
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Revision"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateRevision
+      summary: Update a revision.
+      description: Updates a revision
+      tags:
+        - Revisions
+      parameters:
+        - name: instructionId
+          in: path
+          required: true
+          description: Instruction id
+          schema:
+            type: string
+            format: uuid
+        - name: revisionId
+          required: true
+          in: path
+          description: revision id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Revision"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Updated Revision
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Revision"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteRevision
+      summary: Delete a revision.
+      description: Deletes a revision.
+      tags:
+        - Revisions
+      parameters:
+        - name: instructionId
+          in: path
+          required: true
+          description: Instruction id
+          schema:
+            type: string
+            format: uuid
+        - name: revisionId
+          required: true
+          in: path
+          description: revision id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 components:
   securitySchemes:
     bearerAuth:
@@ -591,13 +784,45 @@ components:
             type: string
             format: uuid
           description: List of keycloak user ID's to whom notifications related to modifications and suggestions should be sent. Must contain at least one user id.
-        revision:
-          type: number
+        publishedRevisionId:
+          type: string
+          format: uuid
+          description: UUID of currently active/published revision
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    Revision:
+      type: object
+      description: Revision object
+      required:
+        - instructionId
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Instruction id in UUID format
+        instructionId:
+          type: string
+          format: uuid
+        status:
+          $ref: "#/components/schemas/RevisionStatus"
+        version:
+          type: integer
           format: int32
-          description: Revision
-        revisionApprovedDate:
+          description: Verion
+          readOnly: true
+        approvedDate:
           type: string
           format: date-time
           description: Date time when current revision was approved
         metadata:
           $ref: "#/components/schemas/Metadata"
+
+    RevisionStatus:
+      type: string
+      enum:
+        - PENDING
+        - APPROVED
+        - REJECTED
