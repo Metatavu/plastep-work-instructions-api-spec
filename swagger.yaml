@@ -828,8 +828,9 @@ components:
 
     RevisionStatus:
       type: string
+      description: Revision status enum
       enum:
-        - PENDING
+        - DRAFT
         - ACTIVE
         - REJECTED
         - DEPRECATED
