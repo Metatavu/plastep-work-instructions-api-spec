@@ -772,7 +772,7 @@ components:
       description: Instruction object
       required:
         - productId
-        - responsiblePersons
+        - responsiblePersonIds
       properties:
         id:
           type: string
@@ -782,7 +782,7 @@ components:
         productId:
           type: string
           format: uuid
-        responsiblePersons:
+        responsiblePersonIds:
           type: array
           items:
             type: string
@@ -816,7 +816,7 @@ components:
         version:
           type: integer
           format: int32
-          description: Verion
+          description: Version number
           readOnly: true
         approvedDate:
           type: string
