@@ -800,7 +800,6 @@ components:
       type: object
       description: Revision object
       required:
-        - instructionId
         - status
       properties:
         id:
@@ -811,6 +810,7 @@ components:
         instructionId:
           type: string
           format: uuid
+          readOnly: true
         status:
           $ref: "#/components/schemas/RevisionStatus"
         version:
