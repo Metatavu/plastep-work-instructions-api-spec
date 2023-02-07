@@ -520,11 +520,6 @@ paths:
           description: Filter by status
           schema:
             $ref: "#/components/schemas/RevisionStatus"
-        - name: active
-          in: query
-          description: Filter by active status. Should only return one (1) revision
-          schema:
-            type: boolean
       responses:
         "200":
           description: List of revisions
@@ -807,7 +802,6 @@ components:
       required:
         - instructionId
         - status
-        - active
       properties:
         id:
           type: string
@@ -828,9 +822,7 @@ components:
           type: string
           format: date-time
           description: Date time when current revision was approved
-        active:
-          type: boolean
-          description: Is this the active revision for given instruction
+          readOnly: true
         metadata:
           $ref: "#/components/schemas/Metadata"
 
@@ -838,5 +830,6 @@ components:
       type: string
       enum:
         - PENDING
-        - APPROVED
+        - ACTIVE
         - REJECTED
+        - DEPRECATED
