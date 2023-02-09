@@ -50,7 +50,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/WorkSet"
           headers:
-            X-Total-Count:
+            Total-Count:
               schema:
                 type: integer
                 format: int64
@@ -208,7 +208,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/Product"
           headers:
-            X-Total-Count:
+            Total-Count:
               schema:
                 type: integer
                 format: int64
@@ -366,7 +366,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/Instruction"
           headers:
-            X-Total-Count:
+            Total-Count:
               schema:
                 type: integer
                 format: int64
@@ -530,7 +530,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/Revision"
           headers:
-            X-Total-Count:
+            Total-Count:
               schema:
                 type: integer
                 format: int64
