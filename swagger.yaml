@@ -683,6 +683,85 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/users:
+    get:
+      operationId: listUsers
+      summary: List Users.
+      description: Lists Users.
+      tags:
+        - Users
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size
+          schema:
+            type: integer
+        - name: includeGroupsAndRoles
+          in: query
+          description: Return groups and roles
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserRepresentation"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of card codes.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/users/{userId}:
+    get:
+      operationId: findUser
+      summary: Find a users.
+      description: Finds a user by id.
+      tags:
+        - Users
+      parameters:
+        - name: userId
+          required: true
+          in: path
+          description: users id
+          schema:
+            type: string
+            format: uuid
+        - name: includeGroupsAndRoles
+          in: query
+          description: Should user groups and roles be filled to user representation
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Example
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserRepresentation"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 components:
   securitySchemes:
     bearerAuth:
@@ -834,3 +913,76 @@ components:
         - ACTIVE
         - REJECTED
         - DEPRECATED
+
+    UserRepresentation:
+      type: object
+      description: User representation
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        username:
+          type: string
+        serviceAccountClientId:
+          type: string
+        requiredActions:
+          type: array
+          items:
+            type: string
+        origin:
+          type: string
+        self:
+          type: string
+        notBefore:
+          type: integer
+          format: int32
+        lastName:
+          type: string
+        firstName:
+          type: string
+        groups:
+          type: array
+          items:
+            type: string
+        federationLink:
+          type: string
+        federatedIdentities:
+          type: array
+          items:
+            type: object
+        enabled:
+          type: boolean
+        emailVerified:
+          type: boolean
+        email:
+          type: string
+        disableableCredentialTypes:
+          type: array
+          items:
+            type: string
+        credentials:
+          type: array
+          items:
+            type: object
+        createdTimestamp:
+          type: integer
+          format: int64
+        clientRoles:
+          type: object
+        clientConsents:
+          type: array
+          items:
+            type: object
+        attributes:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        access:
+          type: object
+        realmRoles:
+          type: array
+          items:
+            type: string
