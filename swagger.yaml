@@ -50,7 +50,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/WorkSet"
           headers:
-            X-Total-Count:
+            Total-Count:
               schema:
                 type: integer
                 format: int64
@@ -208,7 +208,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/Product"
           headers:
-            X-Total-Count:
+            Total-Count:
               schema:
                 type: integer
                 format: int64
@@ -332,6 +332,357 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/instructions:
+    get:
+      operationId: listInstructions
+      summary: Lists instructions.
+      description: Lists instructions.
+      tags:
+        - Instructions
+      parameters:
+        - name: page
+          in: query
+          description: Page number. Defaults to 0
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size. Defaults to 10
+          schema:
+            type: integer
+        - name: productId
+          in: query
+          description: Filter by product id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of instructions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Instruction"
+          headers:
+            Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of instructions with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createInstruction
+      summary: Create a instruction.
+      description: Creates a new instruction.
+      tags:
+        - Instructions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Instruction"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created Instruction
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Instruction"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/instructions/{instructionId}:
+    get:
+      operationId: findInstruction
+      summary: Find a instruction.
+      description: Finds a instruction by id.
+      tags:
+        - Instructions
+      parameters:
+        - name: instructionId
+          required: true
+          in: path
+          description: instruction id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Instruction
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Instruction"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateInstruction
+      summary: Update a instruction.
+      description: Updates a instruction
+      tags:
+        - Instructions
+      parameters:
+        - name: instructionId
+          required: true
+          in: path
+          description: instruction id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Instruction"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Updated Instruction
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Instruction"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteInstruction
+      summary: Delete a instruction.
+      description: Deletes a instruction.
+      tags:
+        - Instructions
+      parameters:
+        - name: instructionId
+          required: true
+          in: path
+          description: instruction id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/instructions/{instructionId}/revisions:
+    get:
+      operationId: listRevisions
+      summary: Lists revisions.
+      description: Lists revisions.
+      tags:
+        - Revisions
+      parameters:
+        - name: instructionId
+          in: path
+          required: true
+          description: Instruction id
+          schema:
+            type: string
+            format: uuid
+        - name: page
+          in: query
+          description: Page number. Defaults to 0
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size. Defaults to 10
+          schema:
+            type: integer
+        - name: status
+          in: query
+          description: Filter by status
+          schema:
+            $ref: "#/components/schemas/RevisionStatus"
+      responses:
+        "200":
+          description: List of revisions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Revision"
+          headers:
+            Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of revisions with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createRevision
+      summary: Create a revision.
+      description: Creates a new revision.
+      tags:
+        - Revisions
+      parameters:
+        - name: instructionId
+          in: path
+          required: true
+          description: Instruction id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Revision"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created Revision
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Revision"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/instructions/{instructionId}/revisions/{revisionId}:
+    get:
+      operationId: findRevision
+      summary: Find a revision.
+      description: Finds a revision by id.
+      tags:
+        - Revisions
+      parameters:
+        - name: instructionId
+          in: path
+          required: true
+          description: Instruction id
+          schema:
+            type: string
+            format: uuid
+        - name: revisionId
+          required: true
+          in: path
+          description: revision id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Revision
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Revision"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateRevision
+      summary: Update a revision.
+      description: Updates a revision
+      tags:
+        - Revisions
+      parameters:
+        - name: instructionId
+          in: path
+          required: true
+          description: Instruction id
+          schema:
+            type: string
+            format: uuid
+        - name: revisionId
+          required: true
+          in: path
+          description: revision id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Revision"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Updated Revision
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Revision"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteRevision
+      summary: Delete a revision.
+      description: Deletes a revision.
+      tags:
+        - Revisions
+      parameters:
+        - name: instructionId
+          in: path
+          required: true
+          description: Instruction id
+          schema:
+            type: string
+            format: uuid
+        - name: revisionId
+          required: true
+          in: path
+          description: revision id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 components:
   securitySchemes:
     bearerAuth:
@@ -415,3 +766,71 @@ components:
           description: Work set Id
         metadata:
           $ref: "#/components/schemas/Metadata"
+
+    Instruction:
+      type: object
+      description: Instruction object
+      required:
+        - productId
+        - responsiblePersonIds
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Instruction id in UUID format
+        productId:
+          type: string
+          format: uuid
+        responsiblePersonIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: List of keycloak user ID's to whom notifications related to modifications and suggestions should be sent. Must contain at least one user id.
+        publishedRevisionId:
+          type: string
+          format: uuid
+          description: UUID of currently active/published revision
+          readOnly: true
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    Revision:
+      type: object
+      description: Revision object
+      required:
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Instruction id in UUID format
+        instructionId:
+          type: string
+          format: uuid
+          readOnly: true
+        status:
+          $ref: "#/components/schemas/RevisionStatus"
+        version:
+          type: integer
+          format: int32
+          description: Version number
+          readOnly: true
+        approvedDate:
+          type: string
+          format: date-time
+          description: Date time when current revision was approved
+          readOnly: true
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    RevisionStatus:
+      type: string
+      description: Revision status enum
+      enum:
+        - DRAFT
+        - ACTIVE
+        - REJECTED
+        - DEPRECATED
