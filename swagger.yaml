@@ -760,10 +760,10 @@ components:
         name:
           type: string
           description: Name of the product
-        workSetId:
-          type: string
-          format: uuid
-          description: Work set Id
+        attributes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Attribute"
         metadata:
           $ref: "#/components/schemas/Metadata"
 
@@ -834,3 +834,16 @@ components:
         - ACTIVE
         - REJECTED
         - DEPRECATED
+
+    Attribute:
+      type: object
+      description: Attribute object
+      required:
+        - key
+      properties:
+        key:
+          type: string
+          description: Attribute key
+        value:
+          type: string
+          description: Attribute value
