@@ -714,7 +714,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/UserRepresentation"
+                  $ref: "#/components/schemas/User"
           headers:
             X-Total-Count:
               schema:
@@ -754,7 +754,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserRepresentation"
+                $ref: "#/components/schemas/User"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -914,7 +914,7 @@ components:
         - REJECTED
         - DEPRECATED
 
-    UserRepresentation:
+    User:
       type: object
       description: User representation
       properties:
@@ -924,65 +924,9 @@ components:
           readOnly: true
         username:
           type: string
-        serviceAccountClientId:
-          type: string
-        requiredActions:
-          type: array
-          items:
-            type: string
-        origin:
-          type: string
-        self:
-          type: string
-        notBefore:
-          type: integer
-          format: int32
         lastName:
           type: string
         firstName:
           type: string
-        groups:
-          type: array
-          items:
-            type: string
-        federationLink:
-          type: string
-        federatedIdentities:
-          type: array
-          items:
-            type: object
-        enabled:
-          type: boolean
-        emailVerified:
-          type: boolean
         email:
           type: string
-        disableableCredentialTypes:
-          type: array
-          items:
-            type: string
-        credentials:
-          type: array
-          items:
-            type: object
-        createdTimestamp:
-          type: integer
-          format: int64
-        clientRoles:
-          type: object
-        clientConsents:
-          type: array
-          items:
-            type: object
-        attributes:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              type: string
-        access:
-          type: object
-        realmRoles:
-          type: array
-          items:
-            type: string
