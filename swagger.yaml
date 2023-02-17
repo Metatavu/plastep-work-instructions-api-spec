@@ -922,8 +922,6 @@ components:
           type: string
           format: uuid
           readOnly: true
-        username:
-          type: string
         lastName:
           type: string
         firstName:
