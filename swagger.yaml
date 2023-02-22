@@ -682,6 +682,54 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /v1/users:
+    get:
+      operationId: listUsers
+      summary: Lists users.
+      description: Lists users.
+      tags:
+        - Users
+      responses:
+        "200":
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+          headers:
+            Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of users with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/usertest:
+    get:
+      operationId: UserTest
+      summary: Usertest.
+      description: Usertest.
+      tags:
+        - Users
+      responses:
+        "200":
+          description: Usertest
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserTest"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
 components:
   securitySchemes:
@@ -834,3 +882,25 @@ components:
         - ACTIVE
         - REJECTED
         - DEPRECATED
+
+    User:
+      type: object
+      description: User object
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: User id in UUID format
+        username:
+          type: string
+          readOnly: true
+          description: Username
+
+    UserTest:
+      type: object
+      description: User object
+      properties:
+        name:
+          type: string
+          readOnly: true
+          description: Username
