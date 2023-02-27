@@ -813,6 +813,7 @@ components:
       description: WorkSet object. WorkSet describes a single place where one or more phases are done.
       required:
         - name
+        - productIds
       properties:
         id:
           type: string
@@ -822,6 +823,12 @@ components:
         name:
           type: string
           description: Work set name
+        productIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: List of product ids available for this workset. 
         metadata:
           $ref: "#/components/schemas/Metadata"
 
@@ -839,10 +846,6 @@ components:
         name:
           type: string
           description: Name of the product
-        workSetId:
-          type: string
-          format: uuid
-          description: Work set Id
         metadata:
           $ref: "#/components/schemas/Metadata"
 
