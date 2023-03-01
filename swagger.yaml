@@ -23,7 +23,7 @@ paths:
                 type: string
 
   /v1/system/synchronize/products:
-    get:
+    post:
       operationId: synchronizeProducts
       summary: Starts the synchronization process of the products
       description: Starts the synchronization process of the products
@@ -32,10 +32,6 @@ paths:
       responses:
         "200":
           description: Sync started
-          content:
-            text/plain:
-              schema:
-                type: string
 
   /v1/workSets:
     get:
