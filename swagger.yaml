@@ -33,7 +33,7 @@ paths:
         "200":
           description: Sync started
     get:
-      operationId: getSynchronizeProductsStatus
+      operationId: getProductSynchronizationInProgress
       summary: Gets the status of synchronization process of the products
       description: Gets the status of synchronization process of the products
       tags:
