@@ -32,6 +32,25 @@ paths:
       responses:
         "200":
           description: Sync started
+    get:
+      operationId: getProductSynchronizationInProgress
+      summary: Gets the status of synchronization process of the products
+      description: Gets the status of synchronization process of the products
+      tags:
+        - System
+      responses:
+        "200":
+          description: Status of sync process
+          content:
+            application/json:
+              schema:
+                type: boolean
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /v1/workSets:
     get:
