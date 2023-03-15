@@ -731,11 +731,6 @@ paths:
           description: Page size
           schema:
             type: integer
-        - name: includeGroupsAndRoles
-          in: query
-          description: Return groups and roles
-          schema:
-            type: boolean
       responses:
         "200":
           description: List of users
@@ -750,7 +745,7 @@ paths:
               schema:
                 type: integer
                 format: int64
-              description: Total count of card codes.
+              description: Total count of users
         "default":
           description: Invalid request was sent to the server
           content:
@@ -773,14 +768,9 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: includeGroupsAndRoles
-          in: query
-          description: Should user groups and roles be filled to user representation
-          schema:
-            type: boolean
       responses:
         "200":
-          description: Example
+          description: User
           content:
             application/json:
               schema:
