@@ -1163,11 +1163,10 @@ components:
         instructionText:
           type: string
           description: Detailed instruction text for this phase
-        media:
+        mediaS3Keys:
           type: array
           items:
             type: string
-            format: URI
-          description: List of media URIs
+          description: List S3 keys
         metadata:
           $ref: "#/components/schemas/Metadata"
