@@ -421,7 +421,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MachineCard"
+                type: array
+                items:
+                  $ref: "#/components/schemas/MachineCard"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of machine cards with given filters.
         "default":
           description: Invalid request was sent to the server
           content:
@@ -451,9 +459,9 @@ paths:
             format: uuid
       requestBody:
         content:
-        application/json:
+          application/json:
             schema:
-            $ref: "#/components/schemas/MachineCard"
+              $ref: "#/components/schemas/MachineCard"
         description: Payload
         required: true
       responses:
@@ -461,13 +469,13 @@ paths:
           description: Created MachineCard
           content:
             application/json:
-            schema:
+              schema:
                 $ref: "#/components/schemas/MachineCard"
         "default":
           description: Invalid request was sent to the server
           content:
             application/json:
-            schema:
+              schema:
                 $ref: "#/components/schemas/Error"
 
   /v1/workSets/{workSetId}/phases/{phaseId}/machineCards/{machineCardId}:
