@@ -1506,6 +1506,9 @@ components:
     MachineCardPropertyValue:
       type: object
       description: Machine card's property key with value
+      required:
+        - machineCardPropertyKeyId
+         - value
       properties:
         machineCardPropertyKeyId:
           type: string
@@ -1518,6 +1521,8 @@ components:
     MachineCard:
       type: object
       description: Machine card object
+      required:
+        - phaseId
       properties:
         id:
           type: string
