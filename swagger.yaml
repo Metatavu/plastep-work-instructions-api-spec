@@ -970,7 +970,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/machineCardProperties:
+  /v1/machineCardPropertyKeys:
     get:
       operationId: listMachineCardProperties
       summary: Lists machine card properties.
@@ -996,7 +996,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/MachineCardProperty"
+                  $ref: "#/components/schemas/MachineCardPropertyKey"
           headers:
             Total-Count:
               schema:
@@ -1010,25 +1010,25 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     post:
-      operationId: createMachineCardProperty
-      summary: Create a machine card property.
-      description: Creates a new machine card property.
+      operationId: createMachineCardPropertyKey
+      summary: Create a machine card property key.
+      description: Creates a new machine card property key.
       tags:
         - MachineCardProperties
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/MachineCardProperty"
+              $ref: "#/components/schemas/MachineCardPropertyKey"
         description: Payload
         required: true
       responses:
         "200":
-          description: Created machine card property
+          description: Created machine card property key
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MachineCardProperty"
+                $ref: "#/components/schemas/MachineCardPropertyKey"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -1036,28 +1036,28 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/machineCardProperties/{id}:
+  /v1/machineCardPropertyKeys/{id}:
     get:
-      operationId: findMachineCardProperty
-      summary: Find a machine card property.
-      description: Finds a machine card property by id.
+      operationId: findMachineCardPropertyKey
+      summary: Find a machine card property key.
+      description: Finds a machine card property key by id.
       tags:
         - WorkSets
       parameters:
         - name: id
           required: true
           in: path
-          description: machine card property id
+          description: machine card property key id
           schema:
             type: string
             format: uuid
       responses:
         "200":
-          description: Machine card property
+          description: machine card property key
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MachineCardProperty"
+                $ref: "#/components/schemas/MachineCardPropertyKey"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -1065,33 +1065,33 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     put:
-      operationId: updateMachineCardProperty
-      summary: Update a machine card property.
-      description: Updates a machine card property.
+      operationId: updateMachineCardPropertyKey
+      summary: Update a machine card property key.
+      description: Updates a machine card property key.
       tags:
         - MachineCardProperties
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/MachineCardProperty"
+              $ref: "#/components/schemas/MachineCardPropertyKey"
         description: Payload
         required: true
       parameters:
         - name: id
           required: true
           in: path
-          description: machine card property id
+          description: machine card property key id
           schema:
             type: string
             format: uuid
       responses:
         "200":
-          description: Updated machine card property
+          description: Updated machine card property key
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/MachineCardProperty"
+                $ref: "#/components/schemas/MachineCardPropertyKey"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -1099,16 +1099,16 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     delete:
-      operationId: deleteMachineCardProperty
-      summary: Delete a machine card property.
-      description: Deletes a machine card property.
+      operationId: deleteMachineCardPropertyKey
+      summary: Delete a machine card property key.
+      description: Deletes a machine card property key.
       tags:
         - MachineCardProperties
       parameters:
         - name: id
           required: true
           in: path
-          description: machine card property id
+          description: machine card property key id
           schema:
             type: string
             format: uuid
@@ -1323,7 +1323,7 @@ components:
         metadata:
           $ref: "#/components/schemas/Metadata"
 
-    MachineCardProperty:
+    MachineCardPropertyKey:
       type: object
       description: Single property of machine card
       required:
