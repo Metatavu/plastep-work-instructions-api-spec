@@ -1336,4 +1336,4 @@ components:
           description: Property id in UUID format
         name:
           type: string
-          description: Name of the property
+          description: Name of the property, should be unique
