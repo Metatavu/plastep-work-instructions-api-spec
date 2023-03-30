@@ -1328,7 +1328,6 @@ components:
       description: Single property of machine card
       required:
         - name
-        - value
       properties:
         id:
           type: string
