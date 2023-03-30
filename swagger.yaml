@@ -972,11 +972,11 @@ paths:
 
   /v1/machineCardPropertyKeys:
     get:
-      operationId: listMachineCardProperties
-      summary: Lists machine card properties.
-      description: Lists machine card properties.
+      operationId: listMachineCardPropertyKeys
+      summary: Lists machine card property keys.
+      description: Lists machine card property keys.
       tags:
-        - MachineCardProperties
+        - MachineCardPropertyKeys
       parameters:
         - name: page
           in: query
@@ -990,7 +990,7 @@ paths:
             type: integer
       responses:
         "200":
-          description: List of machine card properties
+          description: List of machine card property keys
           content:
             application/json:
               schema:
@@ -1002,7 +1002,7 @@ paths:
               schema:
                 type: integer
                 format: int64
-              description: Total count of machine card properties with given filters.
+              description: Total count of machine card property keys with given filters.
         "default":
           description: Invalid request was sent to the server
           content:
@@ -1014,7 +1014,7 @@ paths:
       summary: Create a machine card property key.
       description: Creates a new machine card property key.
       tags:
-        - MachineCardProperties
+        - MachineCardPropertyKeys
       requestBody:
         content:
           application/json:
@@ -1069,7 +1069,7 @@ paths:
       summary: Update a machine card property key.
       description: Updates a machine card property key.
       tags:
-        - MachineCardProperties
+        - MachineCardPropertyKeys
       requestBody:
         content:
           application/json:
@@ -1103,7 +1103,7 @@ paths:
       summary: Delete a machine card property key.
       description: Deletes a machine card property key.
       tags:
-        - MachineCardProperties
+        - MachineCardPropertyKeys
       parameters:
         - name: id
           required: true
