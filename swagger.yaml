@@ -1336,6 +1336,75 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/machines:
+    get:
+      operationId: listMachines
+      summary: Lists machines.
+      description: Lists machines.
+      tags:
+        - Machines
+      parameters:
+        - name: page
+          in: query
+          description: Page number. Defaults to 0
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size. Defaults to 10
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of machines
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Machine"
+          headers:
+            Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of machines with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/machines/{machineId}:
+    get:
+      operationId: findMachine
+      summary: Find a machine.
+      description: Finds a machine by id.
+      tags:
+        - Products
+      parameters:
+        - name: machineId
+          required: true
+          in: path
+          description: machine id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Machine
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Machine"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 components:
   securitySchemes:
     bearerAuth:
@@ -1588,3 +1657,23 @@ components:
             $ref: "#/components/schemas/MachineCardPropertyValue"
         metadata:
           $ref: "#/components/schemas/Metadata"
+
+      Machine:
+        type: object
+        description: Machine object
+        required:
+          - code
+        properties:
+          id:
+            type: string
+            format: uuid
+            readOnly: true
+            description: Machine id in UUID format
+          code:
+            type: string
+            description: Machine code
+          description:
+            type: string
+            description: Machine description
+          metadata:
+            $ref: "#/components/schemas/Metadata"
