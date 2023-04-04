@@ -1557,7 +1557,7 @@ components:
       description: Machine card's property key with value
       required:
         - machineCardPropertyKeyId
-         - value
+        - value
       properties:
         machineCardPropertyKeyId:
           type: string
