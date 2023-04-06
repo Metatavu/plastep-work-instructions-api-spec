@@ -445,6 +445,13 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: machineId
+          required: false
+          in: query
+          description: machine ID
+          schema:
+              type: string
+              format: uuid
       responses:
         "200":
           description: List of machine cards
@@ -1681,6 +1688,10 @@ components:
           type: string
           format: uuid
           description: Phase id in UUID format
+        machineId:
+          type: string
+          format: uuid
+          description: Machine id in UUID format
         propertyValues:
           type: array
           items:
