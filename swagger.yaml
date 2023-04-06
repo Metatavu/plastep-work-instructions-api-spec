@@ -1658,22 +1658,22 @@ components:
         metadata:
           $ref: "#/components/schemas/Metadata"
 
-      Machine:
-        type: object
-        description: Machine object
-        required:
-          - code
-        properties:
-          id:
-            type: string
-            format: uuid
-            readOnly: true
-            description: Machine id in UUID format
-          code:
-            type: string
-            description: Machine code
-          description:
-            type: string
-            description: Machine description
-          metadata:
-            $ref: "#/components/schemas/Metadata"
+    Machine:
+      type: object
+      description: Machine object
+      required:
+        - code
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Machine id in UUID format
+        code:
+          type: string
+          description: Machine code
+        description:
+          type: string
+          description: Machine description
+        metadata:
+          $ref: "#/components/schemas/Metadata"
