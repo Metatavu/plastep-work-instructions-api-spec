@@ -52,6 +52,36 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/system/synchronize/machines:
+    post:
+      operationId: synchronizeMachines
+      summary: Starts the synchronization process of the machines
+      description: Starts the synchronization process of the machines
+      tags:
+        - System
+      responses:
+        "200":
+          description: Sync started
+    get:
+      operationId: getMachineSynchronizationInProgress
+      summary: Gets the status of synchronization process of the machines
+      description: Gets the status of synchronization process of the machines
+      tags:
+        - System
+      responses:
+        "200":
+          description: Status of sync process
+          content:
+            application/json:
+              schema:
+                type: boolean
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   /v1/workSets:
     get:
       operationId: listWorkSets
@@ -415,6 +445,13 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: machineId
+          required: false
+          in: query
+          description: machine ID
+          schema:
+              type: string
+              format: uuid
       responses:
         "200":
           description: List of machine cards
@@ -1382,7 +1419,7 @@ paths:
       summary: Find a machine.
       description: Finds a machine by id.
       tags:
-        - Products
+        - Machines
       parameters:
         - name: machineId
           required: true
@@ -1651,6 +1688,10 @@ components:
           type: string
           format: uuid
           description: Phase id in UUID format
+        machineId:
+          type: string
+          format: uuid
+          description: Machine id in UUID format
         propertyValues:
           type: array
           items:
