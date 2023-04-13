@@ -1472,6 +1472,11 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: includeStructure
+          in: query
+          description: Include comments in product substructure. Product ID must be specified.
+          schema:
+            type: boolean
       responses:
         "200":
           description: List of comments
