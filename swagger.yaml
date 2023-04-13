@@ -1472,9 +1472,9 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: includeStructure
+        - name: includeSubStructure
           in: query
-          description: Include comments in product substructure. Product ID must be specified and revision ID must NOT.
+          description: Include comments from sub products of product with given ID. ProductId must exist. RevisionId cannot be used with this filter.
           schema:
             type: boolean
       responses:
