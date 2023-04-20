@@ -82,20 +82,31 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/system/synchronize/phases:
+  /v1/system/synchronize/workSetsAndPhases:
     post:
-      operationId: synchronizePhases
-      summary: Starts the synchronization process of the phases
-      description: Starts the synchronization process of the phases
+      operationId: synchronizeWorkSetsAndPhases
+      summary: Starts the synchronization process of the work sets and phases
+      description: Starts the synchronization process of the work sets and phases
+      parameters:
+        - name: updatedAfter
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: updatedBefore
+          in: query
+          required: true
+          schema:
+            type: string
       tags:
         - System
       responses:
         "200":
           description: Sync started
     get:
-      operationId: getPhaseSynchronizationInProgress
-      summary: Gets the status of synchronization process of the phases
-      description: Gets the status of synchronization process of the phases
+      operationId: getWorkSetsAndPhasesSynchronizationInProgress
+      summary: Gets the status of synchronization process of the work sets and phases
+      description: Gets the status of synchronization process of the work sets and phases
       tags:
         - System
       responses:
@@ -1692,7 +1703,8 @@ components:
       description: WorkSet object. WorkSet describes a single place where one or more phases are done.
       required:
         - name
-        - productIds
+        - productId
+        - revisionId
       properties:
         id:
           type: string
@@ -1702,12 +1714,14 @@ components:
         name:
           type: string
           description: Work set name
-        productIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-          description: List of product ids available for this workset.
+        productId:
+          type: string
+          format: uuid
+          description: Product id of workset
+        revisionId:
+          type: string
+          format: uuid
+          description: Revision id of workset
         metadata:
           $ref: "#/components/schemas/Metadata"
 
