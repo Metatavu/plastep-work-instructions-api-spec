@@ -1477,6 +1477,11 @@ paths:
           description: Include comments from sub products of product with given ID. ProductId must exist. RevisionId cannot be used with this filter.
           schema:
             type: boolean
+        - name: fromAllRevisions
+          in: query
+          description: Include comments from all revisions instead from just the active ones. RevisionId cannot be used with this filter.
+          schema:
+            type: boolean
       responses:
         "200":
           description: List of comments
