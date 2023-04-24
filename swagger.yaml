@@ -1739,6 +1739,9 @@ components:
         name:
           type: string
           description: Name of the product
+        productCode:
+          type: string
+          description: Product code
         metadata:
           $ref: "#/components/schemas/Metadata"
 
