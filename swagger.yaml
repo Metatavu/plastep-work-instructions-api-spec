@@ -141,6 +141,12 @@ paths:
           description: Page size. Defaults to 10
           schema:
             type: integer
+        - name: productId
+          in: query
+          description: Filter by product ID
+          schema:
+            type: string
+            format: uuid
       responses:
         "200":
           description: List of work sets
@@ -1215,9 +1221,20 @@ paths:
           schema:
             type: string
             format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CopyContentChanges"
+        description: Payload
+        required: true
       responses:
-        "204":
-          description: Success
+        "200":
+          description: Copied Revision
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Revision"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -1996,3 +2013,43 @@ components:
           description: Comment text
         metadata:
           $ref: "#/components/schemas/Metadata"
+
+    CopyPhase:
+      type: object
+      required:
+        - originalPhaseId
+        - newPhase
+      properties:
+        originalPhaseId:
+          type: string
+          format: uuid
+          description: Original phase id in UUID format
+        newPhase:
+          $ref: "#/components/schemas/Phase"
+
+    CopyMachinesCard:
+      type: object
+      required:
+        - originalMachineCardId
+        - newMachineCard
+      properties:
+        originalMachineCardId:
+          type: string
+          format: uuid
+          description: Original machine card id in UUID format
+        newMachineCard:
+          $ref: "#/components/schemas/MachineCard"
+
+    CopyContentChanges:
+      type: object
+      properties:
+        newPhases:
+          type: array
+          items:
+            $ref: "#/components/schemas/CopyPhase"
+          description: List of new phases
+        newMachineCards:
+          type: array
+          items:
+            $ref: "#/components/schemas/CopyMachinesCard"
+          description: List of new machine cards
