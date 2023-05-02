@@ -143,7 +143,13 @@ paths:
             type: integer
         - name: productId
           in: query
-          description: Filter by product ID
+          description: Filter by product ID. If provided without revision ID, returns work sets for currently published revision of the product.
+          schema:
+            type: string
+            format: uuid
+        - name: revisionId
+          in: query
+          description: Filter by revision ID. Product ID must be provided as well.
           schema:
             type: string
             format: uuid
