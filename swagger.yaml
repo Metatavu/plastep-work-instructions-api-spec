@@ -1012,7 +1012,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/instructions/{instructionId}/revisions:
+  /v1/revisions:
     get:
       operationId: listRevisions
       summary: Lists revisions.
@@ -1020,13 +1020,6 @@ paths:
       tags:
         - Revisions
       parameters:
-        - name: instructionId
-          in: path
-          required: true
-          description: Instruction id
-          schema:
-            type: string
-            format: uuid
         - name: page
           in: query
           description: Page number. Defaults to 0
@@ -1037,6 +1030,12 @@ paths:
           description: Page size. Defaults to 10
           schema:
             type: integer
+        - name: instructionId
+          in: query
+          description: Instruction id
+          schema:
+            type: string
+            format: uuid
         - name: status
           in: query
           description: Filter by status
@@ -1069,14 +1068,6 @@ paths:
       description: Creates a new revision.
       tags:
         - Revisions
-      parameters:
-        - name: instructionId
-          in: path
-          required: true
-          description: Instruction id
-          schema:
-            type: string
-            format: uuid
       requestBody:
         content:
           application/json:
@@ -1098,7 +1089,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/instructions/{instructionId}/revisions/{revisionId}:
+  /v1/revisions/{revisionId}:
     get:
       operationId: findRevision
       summary: Find a revision.
@@ -1106,13 +1097,6 @@ paths:
       tags:
         - Revisions
       parameters:
-        - name: instructionId
-          in: path
-          required: true
-          description: Instruction id
-          schema:
-            type: string
-            format: uuid
         - name: revisionId
           required: true
           in: path
@@ -1140,13 +1124,6 @@ paths:
       tags:
         - Revisions
       parameters:
-        - name: instructionId
-          in: path
-          required: true
-          description: Instruction id
-          schema:
-            type: string
-            format: uuid
         - name: revisionId
           required: true
           in: path
@@ -1181,13 +1158,6 @@ paths:
       tags:
         - Revisions
       parameters:
-        - name: instructionId
-          in: path
-          required: true
-          description: Instruction id
-          schema:
-            type: string
-            format: uuid
         - name: revisionId
           required: true
           in: path
@@ -1205,7 +1175,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/instructions/{instructionId}/revisions/{revisionId}/copy:
+  /v1/revisions/{revisionId}/copy:
     post:
       operationId: copyRevision
       summary: Copies a revision.
@@ -1213,13 +1183,6 @@ paths:
       tags:
         - Revisions
       parameters:
-        - name: instructionId
-          in: path
-          required: true
-          description: Instruction id
-          schema:
-            type: string
-            format: uuid
         - name: revisionId
           required: true
           in: path
@@ -1834,16 +1797,17 @@ components:
       description: Revision object
       required:
         - status
+        - instructionId
       properties:
         id:
           type: string
           format: uuid
           readOnly: true
-          description: Instruction id in UUID format
+          description: Revision id in UUID format
         instructionId:
           type: string
           format: uuid
-          readOnly: true
+          description: Instruction id in UUID format
         status:
           $ref: "#/components/schemas/RevisionStatus"
         version:
