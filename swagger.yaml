@@ -720,6 +720,11 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: search
+          in: query
+          description: Filter by search term. At this stage this works only with product code
+          schema:
+            type: string
       responses:
         "200":
           description: List of products
