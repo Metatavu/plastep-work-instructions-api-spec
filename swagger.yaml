@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   version: 1.0.0
-  title: Template API-spec
+  title: Plastep work instructions API-spec
 
 security:
   - bearerAuth: []
@@ -21,6 +21,1659 @@ paths:
             text/plain:
               schema:
                 type: string
+
+  /v1/system/synchronize/products:
+    post:
+      operationId: synchronizeProducts
+      summary: Starts the synchronization process of the products
+      description: Starts the synchronization process of the products
+      tags:
+        - System
+      responses:
+        "200":
+          description: Sync started
+    get:
+      operationId: getProductSynchronizationInProgress
+      summary: Gets the status of synchronization process of the products
+      description: Gets the status of synchronization process of the products
+      tags:
+        - System
+      responses:
+        "200":
+          description: Status of sync process
+          content:
+            application/json:
+              schema:
+                type: boolean
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/system/synchronize/machines:
+    post:
+      operationId: synchronizeMachines
+      summary: Starts the synchronization process of the machines
+      description: Starts the synchronization process of the machines
+      tags:
+        - System
+      responses:
+        "200":
+          description: Sync started
+    get:
+      operationId: getMachineSynchronizationInProgress
+      summary: Gets the status of synchronization process of the machines
+      description: Gets the status of synchronization process of the machines
+      tags:
+        - System
+      responses:
+        "200":
+          description: Status of sync process
+          content:
+            application/json:
+              schema:
+                type: boolean
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/system/synchronize/workSetsAndPhases:
+    post:
+      operationId: synchronizeWorkSetsAndPhases
+      summary: Starts the synchronization process of the work sets and phases
+      description: Starts the synchronization process of the work sets and phases
+      parameters:
+        - name: updatedAfter
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: updatedBefore
+          in: query
+          required: true
+          schema:
+            type: string
+      tags:
+        - System
+      responses:
+        "200":
+          description: Sync started
+    get:
+      operationId: getWorkSetsAndPhasesSynchronizationInProgress
+      summary: Gets the status of synchronization process of the work sets and phases
+      description: Gets the status of synchronization process of the work sets and phases
+      tags:
+        - System
+      responses:
+        "200":
+          description: Status of sync phase process
+          content:
+            application/json:
+              schema:
+                type: boolean
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/workSets:
+    get:
+      operationId: listWorkSets
+      summary: Lists work sets.
+      description: Lists work sets.
+      tags:
+        - WorkSets
+      parameters:
+        - name: page
+          in: query
+          description: Page number. Defaults to 0
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size. Defaults to 10
+          schema:
+            type: integer
+        - name: productId
+          in: query
+          description: Filter by product ID. If provided without revision ID, returns work sets for currently published revision of the product.
+          schema:
+            type: string
+            format: uuid
+        - name: revisionId
+          in: query
+          description: Filter by revision ID. Product ID must be provided as well.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of work sets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WorkSet"
+          headers:
+            Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of work sets with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createWorkSet
+      summary: Create a work set.
+      description: Creates a new work set.
+      tags:
+        - WorkSets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkSet"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created WorkSet
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkSet"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/workSets/{workSetId}:
+    get:
+      operationId: findWorkSet
+      summary: Find a work set.
+      description: Finds a work set by id.
+      tags:
+        - WorkSets
+      parameters:
+        - name: workSetId
+          required: true
+          in: path
+          description: work set id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: WorkSet
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkSet"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateWorkSet
+      summary: Update a work set.
+      description: Updates a work set
+      tags:
+        - WorkSets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkSet"
+        description: Payload
+        required: true
+      parameters:
+        - name: workSetId
+          required: true
+          in: path
+          description: work set id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated WorkSet
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkSet"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteWorkSet
+      summary: Delete a work set.
+      description: Deletes a work set.
+      tags:
+        - WorkSets
+      parameters:
+        - name: workSetId
+          required: true
+          in: path
+          description: work set id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/workSets/{workSetId}/phases:
+    get:
+      operationId: listPhases
+      summary: Lists phases.
+      description: Lists phases.
+      tags:
+        - Phases
+      parameters:
+        - name: page
+          in: query
+          description: Page number. Defaults to 0
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size. Defaults to 10
+          schema:
+            type: integer
+        - name: workSetId
+          required: true
+          in: path
+          description: workSet ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of phases
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Phase"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of phases with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createPhase
+      summary: Create a phase.
+      description: Creates a new phase.
+      tags:
+        - Phases
+      parameters:
+        - name: workSetId
+          required: true
+          in: path
+          description: workSet ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Phase"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created Phase
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Phase"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/workSets/{workSetId}/phases/{phaseId}:
+    get:
+      operationId: findPhase
+      summary: Find a phase.
+      description: Finds a phase by id.
+      tags:
+        - Phases
+      parameters:
+        - name: workSetId
+          required: true
+          in: path
+          description: workSet ID
+          schema:
+            type: string
+            format: uuid
+        - name: phaseId
+          required: true
+          in: path
+          description: phase id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Phase
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Phase"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updatePhase
+      summary: Update a phase.
+      description: Updates a phase
+      tags:
+        - Phases
+      parameters:
+        - name: workSetId
+          required: true
+          in: path
+          description: workSet ID
+          schema:
+            type: string
+            format: uuid
+        - name: phaseId
+          required: true
+          in: path
+          description: phase id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Phase"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Updated Phase
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Phase"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deletePhase
+      summary: Delete a phase.
+      description: Deletes a phase.
+      tags:
+        - Phases
+      parameters:
+        - name: workSetId
+          required: true
+          in: path
+          description: workSet ID
+          schema:
+            type: string
+            format: uuid
+        - name: phaseId
+          required: true
+          in: path
+          description: phase id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+  /v1/workSets/{workSetId}/phases/{phaseId}/machineCards:
+    get:
+      operationId: listMachineCards
+      summary: Lists machine cards.
+      description: Lists machine cards.
+      tags:
+        - MachineCards
+      parameters:
+        - name: workSetId
+          required: true
+          in: path
+          description: workSet ID
+          schema:
+            type: string
+            format: uuid
+        - name: phaseId
+          required: true
+          in: path
+          description: phase id
+          schema:
+            type: string
+            format: uuid
+        - name: machineId
+          required: false
+          in: query
+          description: machine ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of machine cards
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MachineCard"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of machine cards with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createMachineCard
+      summary: Create a machine card.
+      description: Creates a new machine card.
+      tags:
+        - MachineCards
+      parameters:
+        - name: workSetId
+          required: true
+          in: path
+          description: workSet ID
+          schema:
+            type: string
+            format: uuid
+        - name: phaseId
+          required: true
+          in: path
+          description: phase id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MachineCard"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created MachineCard
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MachineCard"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/workSets/{workSetId}/phases/{phaseId}/machineCards/{machineCardId}:
+    get:
+      operationId: findMachineCard
+      summary: Find a machine card.
+      description: Finds a machine card by id.
+      tags:
+        - MachineCards
+      parameters:
+        - name: workSetId
+          required: true
+          in: path
+          description: workSet ID
+          schema:
+            type: string
+            format: uuid
+        - name: phaseId
+          required: true
+          in: path
+          description: phase id
+          schema:
+            type: string
+            format: uuid
+        - name: machineCardId
+          required: true
+          in: path
+          description: machine card id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: MachineCard
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MachineCard"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateMachineCard
+      summary: Update a machine card.
+      description: Updates a machine card
+      tags:
+        - MachineCards
+      parameters:
+        - name: workSetId
+          required: true
+          in: path
+          description: workSet ID
+          schema:
+            type: string
+            format: uuid
+        - name: phaseId
+          required: true
+          in: path
+          description: phase id
+          schema:
+            type: string
+            format: uuid
+        - name: machineCardId
+          required: true
+          in: path
+          description: machine card id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MachineCard"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Updated MachineCard
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MachineCard"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteMachineCard
+      summary: Delete a machine card.
+      description: Deletes a machine card.
+      tags:
+        - MachineCards
+      parameters:
+        - name: workSetId
+          required: true
+          in: path
+          description: workSet ID
+          schema:
+            type: string
+            format: uuid
+        - name: phaseId
+          required: true
+          in: path
+          description: phase id
+          schema:
+            type: string
+            format: uuid
+        - name: machineCardId
+          required: true
+          in: path
+          description: machine card id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/products:
+    get:
+      operationId: listProducts
+      summary: Lists products.
+      description: Lists products.
+      tags:
+        - Products
+      parameters:
+        - name: page
+          in: query
+          description: Page number. Defaults to 0
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size. Defaults to 10
+          schema:
+            type: integer
+        - name: workSetId
+          in: query
+          description: Filter by workSetId
+          schema:
+            type: string
+            format: uuid
+        - name: search
+          in: query
+          description: Filter by search term. At this stage this works only with product code
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+          headers:
+            Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of products with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createProduct
+      summary: Create a product.
+      description: Creates a new product.
+      tags:
+        - Products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created Product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/products/{productId}:
+    get:
+      operationId: findProduct
+      summary: Find a product.
+      description: Finds a product by id.
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          required: true
+          in: path
+          description: product id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateProduct
+      summary: Update a product.
+      description: Updates a product
+      tags:
+        - Products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+        description: Payload
+        required: true
+      parameters:
+        - name: productId
+          required: true
+          in: path
+          description: product id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated Product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteProduct
+      summary: Delete a product.
+      description: Deletes a product.
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          required: true
+          in: path
+          description: product id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/instructions:
+    get:
+      operationId: listInstructions
+      summary: Lists instructions.
+      description: Lists instructions.
+      tags:
+        - Instructions
+      parameters:
+        - name: page
+          in: query
+          description: Page number. Defaults to 0
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size. Defaults to 10
+          schema:
+            type: integer
+        - name: productId
+          in: query
+          description: Filter by product id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of instructions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Instruction"
+          headers:
+            Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of instructions with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createInstruction
+      summary: Create a instruction.
+      description: Creates a new instruction.
+      tags:
+        - Instructions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Instruction"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created Instruction
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Instruction"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/instructions/{instructionId}:
+    get:
+      operationId: findInstruction
+      summary: Find a instruction.
+      description: Finds a instruction by id.
+      tags:
+        - Instructions
+      parameters:
+        - name: instructionId
+          required: true
+          in: path
+          description: instruction id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Instruction
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Instruction"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateInstruction
+      summary: Update a instruction.
+      description: Updates a instruction
+      tags:
+        - Instructions
+      parameters:
+        - name: instructionId
+          required: true
+          in: path
+          description: instruction id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Instruction"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Updated Instruction
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Instruction"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteInstruction
+      summary: Delete a instruction.
+      description: Deletes a instruction.
+      tags:
+        - Instructions
+      parameters:
+        - name: instructionId
+          required: true
+          in: path
+          description: instruction id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/revisions:
+    get:
+      operationId: listRevisions
+      summary: Lists revisions.
+      description: Lists revisions.
+      tags:
+        - Revisions
+      parameters:
+        - name: page
+          in: query
+          description: Page number. Defaults to 0
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size. Defaults to 10
+          schema:
+            type: integer
+        - name: instructionId
+          in: query
+          description: Instruction id
+          schema:
+            type: string
+            format: uuid
+        - name: status
+          in: query
+          description: Filter by status
+          schema:
+            $ref: "#/components/schemas/RevisionStatus"
+      responses:
+        "200":
+          description: List of revisions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Revision"
+          headers:
+            Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of revisions with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createRevision
+      summary: Create a revision.
+      description: Creates a new revision.
+      tags:
+        - Revisions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Revision"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created Revision
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Revision"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/revisions/{revisionId}:
+    get:
+      operationId: findRevision
+      summary: Find a revision.
+      description: Finds a revision by id.
+      tags:
+        - Revisions
+      parameters:
+        - name: revisionId
+          required: true
+          in: path
+          description: revision id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Revision
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Revision"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateRevision
+      summary: Update a revision.
+      description: Updates a revision
+      tags:
+        - Revisions
+      parameters:
+        - name: revisionId
+          required: true
+          in: path
+          description: revision id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Revision"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Updated Revision
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Revision"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteRevision
+      summary: Delete a revision.
+      description: Deletes a revision.
+      tags:
+        - Revisions
+      parameters:
+        - name: revisionId
+          required: true
+          in: path
+          description: revision id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/revisions/{revisionId}/copy:
+    post:
+      operationId: copyRevision
+      summary: Copies a revision.
+      description: Copies a revision and all its content to new revision.
+      tags:
+        - Revisions
+      parameters:
+        - name: revisionId
+          required: true
+          in: path
+          description: revision id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CopyContentChanges"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Copied Revision
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Revision"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/users:
+    get:
+      operationId: listUsers
+      summary: List Users.
+      description: Lists Users.
+      tags:
+        - Users
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of users
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/users/{userId}:
+    get:
+      operationId: findUser
+      summary: Find a users.
+      description: Finds a user by id.
+      tags:
+        - Users
+      parameters:
+        - name: userId
+          required: true
+          in: path
+          description: users id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/machineCardPropertyKeys:
+    get:
+      operationId: listMachineCardPropertyKeys
+      summary: Lists machine card property keys.
+      description: Lists machine card property keys.
+      tags:
+        - MachineCardPropertyKeys
+      parameters:
+        - name: page
+          in: query
+          description: Page number. Defaults to 0
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size. Defaults to 10
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of machine card property keys
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MachineCardPropertyKey"
+          headers:
+            Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of machine card property keys with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createMachineCardPropertyKey
+      summary: Create a machine card property key.
+      description: Creates a new machine card property key.
+      tags:
+        - MachineCardPropertyKeys
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MachineCardPropertyKey"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created machine card property key
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MachineCardPropertyKey"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/machineCardPropertyKeys/{id}:
+    get:
+      operationId: findMachineCardPropertyKey
+      summary: Find a machine card property key.
+      description: Finds a machine card property key by id.
+      tags:
+        - MachineCardPropertyKeys
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: machine card property key id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: machine card property key
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MachineCardPropertyKey"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateMachineCardPropertyKey
+      summary: Update a machine card property key.
+      description: Updates a machine card property key.
+      tags:
+        - MachineCardPropertyKeys
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MachineCardPropertyKey"
+        description: Payload
+        required: true
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: machine card property key id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Updated machine card property key
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MachineCardPropertyKey"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteMachineCardPropertyKey
+      summary: Delete a machine card property key.
+      description: Deletes a machine card property key.
+      tags:
+        - MachineCardPropertyKeys
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: machine card property key id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/machines:
+    get:
+      operationId: listMachines
+      summary: Lists machines.
+      description: Lists machines.
+      tags:
+        - Machines
+      parameters:
+        - name: page
+          in: query
+          description: Page number. Defaults to 0
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size. Defaults to 10
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of machines
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Machine"
+          headers:
+            Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of machines with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/machines/{machineId}:
+    get:
+      operationId: findMachine
+      summary: Find a machine.
+      description: Finds a machine by id.
+      tags:
+        - Machines
+      parameters:
+        - name: machineId
+          required: true
+          in: path
+          description: machine id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Machine
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Machine"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/comments:
+    get:
+      operationId: listComments
+      summary: Lists comments.
+      description: Lists comments.
+      tags:
+        - Comments
+      parameters:
+        - name: page
+          in: query
+          description: Page number. Defaults to 0
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size. Defaults to 10
+          schema:
+            type: integer
+        - name: productId
+          in: query
+          description: Filter by product id
+          schema:
+            type: string
+            format: uuid
+        - name: revisionId
+          in: query
+          description: Filter by revision id
+          schema:
+            type: string
+            format: uuid
+        - name: includeSubStructure
+          in: query
+          description: Include comments from sub products of product with given ID. ProductId must exist. RevisionId cannot be used with this filter.
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: List of comments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Comment"
+          headers:
+            Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of comments with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createComment
+      summary: Create a comment.
+      description: Creates a new comment.
+      tags:
+        - Comments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Comment"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created Comment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/comments/{commentId}:
+    get:
+      operationId: findComment
+      summary: Find a comment.
+      description: Finds a comment by id.
+      tags:
+        - Comments
+      parameters:
+        - name: commentId
+          required: true
+          in: path
+          description: comment id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Comment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateComment
+      summary: Update a comment.
+      description: Updates a comment
+      tags:
+        - Comments
+      parameters:
+        - name: commentId
+          required: true
+          in: path
+          description: comment id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Comment"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Updated Comment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteComment
+      summary: Delete a comment.
+      description: Deletes a comment.
+      tags:
+        - Comments
+      parameters:
+        - name: commentId
+          required: true
+          in: path
+          description: comment id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
 components:
   securitySchemes:
@@ -42,3 +1695,336 @@ components:
           format: int32
         message:
           type: string
+
+    Metadata:
+      type: object
+      description: Metadata object
+      properties:
+        creatorId:
+          type: string
+          format: uuid
+          description: ID of creator
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          description: Created date
+          readOnly: true
+        lastModifierId:
+          type: string
+          format: uuid
+          description: Id of last modifier
+          readOnly: true
+        modifiedAt:
+          type: string
+          format: date-time
+          description: Date modified
+          readOnly: true
+
+    WorkSet:
+      type: object
+      description: WorkSet object. WorkSet describes a single place where one or more phases are done.
+      required:
+        - name
+        - productId
+        - revisionId
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Work set id in UUID format
+        name:
+          type: string
+          description: Work set name
+        productId:
+          type: string
+          format: uuid
+          description: Product id of workset
+        revisionId:
+          type: string
+          format: uuid
+          description: Revision id of workset
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    Product:
+      type: object
+      description: Product object. Product describes single item/thing that is produced
+      required:
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Product id in UUID format
+        name:
+          type: string
+          description: Name of the product
+        productCode:
+          type: string
+          description: Product code
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    Instruction:
+      type: object
+      description: Instruction object
+      required:
+        - productId
+        - responsiblePersonIds
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Instruction id in UUID format
+        productId:
+          type: string
+          format: uuid
+        responsiblePersonIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: List of keycloak user ID's to whom notifications related to modifications and suggestions should be sent. Must contain at least one user id.
+        publishedRevisionId:
+          type: string
+          format: uuid
+          description: UUID of currently active/published revision
+          readOnly: true
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    Revision:
+      type: object
+      description: Revision object
+      required:
+        - status
+        - instructionId
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Revision id in UUID format
+        instructionId:
+          type: string
+          format: uuid
+          description: Instruction id in UUID format
+        status:
+          $ref: "#/components/schemas/RevisionStatus"
+        version:
+          type: integer
+          format: int32
+          description: Version number
+          readOnly: true
+        approvedDate:
+          type: string
+          format: date-time
+          description: Date time when current revision was approved
+          readOnly: true
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    RevisionStatus:
+      type: string
+      description: Revision status enum
+      enum:
+        - DRAFT
+        - ACTIVE
+        - REJECTED
+        - DEPRECATED
+
+    User:
+      type: object
+      description: User representation
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        lastName:
+          type: string
+        firstName:
+          type: string
+        email:
+          type: string
+
+    Phase:
+      type: object
+      description: Phase object. Describes single phase within work set. Phase should always be linked to single work set.
+      required:
+        - name
+        - workSetId
+        - instructionText
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Phase id in UUID format
+        name:
+          type: string
+          description: Phase name
+        workSetId:
+          type: string
+          format: uuid
+          description: WorkSet id in UUID format
+        instructionText:
+          type: string
+          description: Detailed instruction text for this phase
+        mediaS3Keys:
+          type: array
+          items:
+            type: string
+          description: List S3 keys
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    MachineCardPropertyKey:
+      type: object
+      description: Single property of machine card
+      required:
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Property id in UUID format
+        name:
+          type: string
+          description: Name of the property, should be unique
+
+    MachineCardPropertyValue:
+      type: object
+      description: Machine card's property key with value
+      required:
+        - machineCardPropertyKeyId
+        - value
+      properties:
+        machineCardPropertyKeyId:
+          type: string
+          format: uuid
+          description: Property id in UUID format
+        value:
+          type: string
+          description: Value of the property
+
+    MachineCard:
+      type: object
+      description: Machine card object
+      required:
+        - phaseId
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Machine card id in UUID format
+        phaseId:
+          type: string
+          format: uuid
+          description: Phase id in UUID format
+        machineId:
+          type: string
+          format: uuid
+          description: Machine id in UUID format
+        propertyValues:
+          type: array
+          items:
+            $ref: "#/components/schemas/MachineCardPropertyValue"
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    Machine:
+      type: object
+      description: Machine object
+      required:
+        - code
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Machine id in UUID format
+        code:
+          type: string
+          description: Machine code
+        description:
+          type: string
+          description: Machine description
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    Comment:
+      type: object
+      description: Machine object
+      required:
+        - productId
+        - author
+        - text
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Comment id in UUID format
+        productId:
+          type: string
+          format: uuid
+          description: Product id in UUID format
+        revisionId:
+          type: string
+          format: uuid
+          description: Revision id in UUID format
+        author:
+          type: string
+          description: Author of the comment
+        text:
+          type: string
+          description: Comment text
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    CopyPhase:
+      type: object
+      required:
+        - originalPhaseId
+        - newPhase
+      properties:
+        originalPhaseId:
+          type: string
+          format: uuid
+          description: Original phase id in UUID format
+        newPhase:
+          $ref: "#/components/schemas/Phase"
+
+    CopyMachinesCard:
+      type: object
+      required:
+        - originalMachineCardId
+        - newMachineCard
+      properties:
+        originalMachineCardId:
+          type: string
+          format: uuid
+          description: Original machine card id in UUID format
+        newMachineCard:
+          $ref: "#/components/schemas/MachineCard"
+
+    CopyContentChanges:
+      type: object
+      properties:
+        newPhases:
+          type: array
+          items:
+            $ref: "#/components/schemas/CopyPhase"
+          description: List of new phases
+        newMachineCards:
+          type: array
+          items:
+            $ref: "#/components/schemas/CopyMachinesCard"
+          description: List of new machine cards
