@@ -153,6 +153,11 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: listOnlyEnabled
+          in: query
+          description: Filter by enabled status. If true, returns only enabled work sets. If false, returns all.
+          schema:
+            type: boolean
       responses:
         "200":
           description: List of work sets
@@ -1728,6 +1733,7 @@ components:
         - name
         - productId
         - revisionId
+        - enabled
       properties:
         id:
           type: string
@@ -1745,6 +1751,9 @@ components:
           type: string
           format: uuid
           description: Revision id of workset
+        enabled:
+          type: boolean
+          description: Is workset enabled
         metadata:
           $ref: "#/components/schemas/Metadata"
 
