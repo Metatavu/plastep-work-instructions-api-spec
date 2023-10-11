@@ -123,6 +123,29 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/system/syncStatus:
+    get:
+      operationId: getSyncStatus
+      summary: Gets the status of synchronization process of the work sets and phases
+      description: Gets the status of synchronization process of the work sets and phases
+      tags:
+        - System
+      responses:
+        "200":
+          description: Status of sync process
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SyncStatus"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   /v1/workSets:
     get:
       operationId: listWorkSets
@@ -1590,3 +1613,32 @@ components:
           items:
             $ref: "#/components/schemas/CopyPhase"
           description: List of new phases
+
+    SyncType:
+      type: string
+      description: Sync enum
+      enum:
+        - MACHINES
+        - PRODUCTS
+        - PHASES
+
+    SyncStatus:
+      type: object
+      properties:
+        syncType:
+          $ref: "#/components/schemas/SyncType"
+        inProgress:
+          type: boolean
+          description: Is sync in progress
+        startedAt:
+          type: string
+          format: date-time
+          description: Date time when sync was started
+        finishedAt:
+          type: string
+          format: date-time
+          description: Date time when sync was finished
+        syncNumber:
+          type: integer
+          format: int32
+          description: Sync number
