@@ -686,7 +686,7 @@ paths:
             type: integer
         - name: productId
           in: query
-          description: Filter by product id
+          description: Filter by product id (strict filter)
           schema:
             type: string
             format: uuid
@@ -704,12 +704,12 @@ paths:
             format: date-time
         - name: productCode
           in: query
-          description: Filter instructions by product code
+          description: Filter instructions by product code (strict filter)
           schema:
             type: string
         - name: productName
           in: query
-          description: Filter instructions by product name
+          description: Filter instructions by product name (filters by partial match of the name start)
           schema:
             type: string
       responses:
