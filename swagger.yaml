@@ -888,6 +888,28 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: modifiedBefore
+          in: query
+          description: Filter instructions modified before given date
+          schema:
+            type: string
+            format: date-time
+        - name: modifiedAfter
+          in: query
+          description: Filter instructions modified after given date
+          schema:
+            type: string
+            format: date-time
+        - name: productCode
+          in: query
+          description: Filter instructions by product code
+          schema:
+            type: string
+        - name: productName
+          in: query
+          description: Filter instructions by product name
+          schema:
+            type: string
       responses:
         "200":
           description: List of instructions
