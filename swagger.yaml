@@ -684,12 +684,28 @@ paths:
           description: Page size. Defaults to 10
           schema:
             type: integer
-        - name: productId
+        - name: modifiedBefore
           in: query
-          description: Filter by product id
+          description: Filter instructions modified before given date
           schema:
             type: string
-            format: uuid
+            format: date-time
+        - name: modifiedAfter
+          in: query
+          description: Filter instructions modified after given date
+          schema:
+            type: string
+            format: date-time
+        - name: productCode
+          in: query
+          description: Filter instructions by product code (strict filter)
+          schema:
+            type: string
+        - name: productName
+          in: query
+          description: Filter instructions by product name (filters by partial match of the name start)
+          schema:
+            type: string
       responses:
         "200":
           description: List of instructions
