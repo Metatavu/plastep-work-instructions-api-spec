@@ -1634,6 +1634,7 @@ components:
         - productId
         - author
         - text
+        - commentType
       properties:
         id:
           type: string
