@@ -1234,6 +1234,33 @@ paths:
           description: Include comments from sub products of product with given ID. ProductId must exist. RevisionId cannot be used with this filter.
           schema:
             type: boolean
+        - name: createdBefore
+          in: query
+          description: Filter comments created before given date
+          schema:
+              type: string
+              format: date-time
+        - name: createdAfter
+          in: query
+          description: Filter comments created after given date
+          schema:
+            type: string
+            format: date-time
+        - name: commentType
+          in: query
+          description: Filter by comment type
+          schema:
+            $ref: "#/components/schemas/CommentType"
+        - name: productCode
+          in: query
+          description: Filter instructions by product code (strict filter)
+          schema:
+            type: string
+        - name: productName
+          in: query
+          description: Filter instructions by product name (filters by partial match of the name start)
+          schema:
+            type: string
       responses:
         "200":
           description: List of comments
@@ -1621,6 +1648,13 @@ components:
           type: string
           format: uuid
           description: Revision id in UUID format
+        parentId:
+          type: string
+          format: uuid
+          description: Parent comment id in UUID format if any
+        commentType:
+          description: Comment type
+          $ref: "#/components/schemas/CommentType"
         author:
           type: string
           description: Author of the comment
@@ -1629,6 +1663,13 @@ components:
           description: Comment text
         metadata:
           $ref: "#/components/schemas/Metadata"
+
+    CommentType:
+      type: string
+      description: Sync enum
+      enum:
+        - COMMENT
+        - REPLY
 
     CopyPhase:
       type: object
