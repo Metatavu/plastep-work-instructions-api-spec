@@ -860,7 +860,7 @@ paths:
             type: integer
         - name: instructionId
           in: query
-          description: Instruction id
+          description: Instruction id, if provided, productCode and productName filters are ignored
           schema:
             type: string
             format: uuid
@@ -871,12 +871,12 @@ paths:
             $ref: "#/components/schemas/RevisionStatus"
         - name: productCode
           in: query
-          description: Filter by product code (strict)
+          description: Filter by product code (strict) if instructionId filter is not present
           schema:
             type: string
         - name: productName
           in: query
-          description: Filter by product name (match by start of the name)
+          description: Filter by product name (match by start of the name) if instructionId filter is not present
           schema:
             type: string
         - name: before
