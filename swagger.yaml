@@ -853,6 +853,28 @@ paths:
           description: Filter by status
           schema:
             $ref: "#/components/schemas/RevisionStatus"
+        - name: productCode
+          in: query
+          description: Filter by product code (strict)
+          schema:
+            type: string
+        - name: productName
+          in: query
+          description: Filter by product name (match by start of the name)
+          schema:
+            type: string
+        - name: before
+          in: query
+          description: Filter by date before
+          schema:
+            type: string
+            format: date-time
+        - name: after
+          in: query
+          description: Filter by date after
+          schema:
+            type: string
+            format: date-time
       responses:
         "200":
           description: List of revisions
