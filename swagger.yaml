@@ -1219,7 +1219,7 @@ paths:
             type: integer
         - name: productId
           in: query
-          description: Filter by product id
+          description: Filter by product id, if used, other product-related filters are ignored
           schema:
             type: string
             format: uuid
@@ -1253,12 +1253,12 @@ paths:
             $ref: "#/components/schemas/CommentType"
         - name: productCode
           in: query
-          description: Filter instructions by product code (strict filter)
+          description: Filter instructions by product code (strict filter), applied only if productId is missing
           schema:
             type: string
         - name: productName
           in: query
-          description: Filter instructions by product name (filters by partial match of the name start)
+          description: Filter instructions by product name (filters by partial match of the name start), applied only if productId is missing
           schema:
             type: string
       responses:
