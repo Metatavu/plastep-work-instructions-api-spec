@@ -1238,8 +1238,8 @@ paths:
           in: query
           description: Filter comments created before given date
           schema:
-              type: string
-              format: date-time
+            type: string
+            format: date-time
         - name: createdAfter
           in: query
           description: Filter comments created after given date
