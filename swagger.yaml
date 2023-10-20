@@ -527,9 +527,14 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: search
+        - name: productCode
           in: query
-          description: Filter by search term. At this stage this works only with product code
+          description: Filter instructions by product code (strict filter)
+          schema:
+            type: string
+        - name: productName
+          in: query
+          description: Filter instructions by product name (filters by partial match of the name start)
           schema:
             type: string
       responses:
