@@ -711,6 +711,12 @@ paths:
           description: Filter instructions by product name (filters by partial match of the name start)
           schema:
             type: string
+        - name: responsiblePersonId
+          in: query
+          description: Filter instructions by work responsible person id
+          schema:
+            type: string
+            format: uuid
       responses:
         "200":
           description: List of instructions
