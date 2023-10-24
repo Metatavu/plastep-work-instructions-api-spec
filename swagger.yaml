@@ -2205,7 +2205,5 @@ components:
           type: number
           format: float
           description: Product inspection field max tolerance
-        status:
-          $ref: "#/components/schemas/ProductInspectionFieldStatus"
         metadata:
           $ref: "#/components/schemas/Metadata"
