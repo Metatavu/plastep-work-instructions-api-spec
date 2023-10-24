@@ -966,6 +966,47 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateProductInspectionTemplate
+      summary: Update a product inspection form template.
+      description: Updates a product inspection form template
+      tags:
+        - ProductInspectionTemplates
+      parameters:
+        - name: instructionId
+          required: true
+          in: path
+          description: instruction id
+          schema:
+            type: string
+            format: uuid
+        - name: templateId
+          required: true
+          in: path
+          description: template id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInspectionTemplate"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Updated ProductInspectionTemplate
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductInspectionTemplate"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     delete:
       operationId: deleteProductInspectionTemplate
       summary: Delete a product inspection form template.
