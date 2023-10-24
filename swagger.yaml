@@ -2115,6 +2115,7 @@ components:
       description: Product inspection object
       required:
         - fields
+        - instructionId
       properties:
         id:
           type: string
@@ -2131,6 +2132,7 @@ components:
             $ref: "#/components/schemas/ProductInspectionField"
           description: List of product inspection fields
         result:
+          readOnly: true
           $ref: "#/components/schemas/InspectionResult"
         metadata:
           $ref: "#/components/schemas/Metadata"
@@ -2169,6 +2171,7 @@ components:
           format: float
           description: Product inspection field max tolerance
         result:
+          readOnly: true
           $ref: "#/components/schemas/InspectionResult"
         metadata:
           $ref: "#/components/schemas/Metadata"
