@@ -1037,6 +1037,193 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+
+  /v1/instructions/{instructionId}/productInspections:
+    get:
+      operationId: listProductInspections
+      summary: Lists product inspections
+      description: Lists product inspections
+      tags:
+        - ProductInspections
+      parameters:
+        - name: page
+          in: query
+          description: Page number. Defaults to 0
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size. Defaults to 10
+          schema:
+            type: integer
+        - name: instructionId
+          required: true
+          in: path
+          description: instruction id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of product inspections
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductInspection"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of product inspections with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createProductInspection
+      summary: Create a product inspection.
+      description: Create a product inspection.
+      tags:
+        - ProductInspections
+      parameters:
+        - name: instructionId
+          required: true
+          in: path
+          description: instruction id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInspection"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created ProductInspection
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductInspection"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/instructions/{instructionId}/productInspections/{inspectionId}:
+    get:
+      operationId: findProductInspection
+      summary: Find product inspection
+      description: Finds product inspection by id
+      tags:
+        - ProductInspections
+      parameters:
+        - name: instructionId
+          required: true
+          in: path
+          description: instruction id
+          schema:
+            type: string
+            format: uuid
+        - name: inspectionId
+          required: true
+          in: path
+          description: inspection id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: ProductInspection
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductInspection"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateProductInspection
+      summary: Update a product inspection
+      description: Updates a product inspection
+      tags:
+        - ProductInspections
+      parameters:
+        - name: instructionId
+          required: true
+          in: path
+          description: instruction id
+          schema:
+            type: string
+            format: uuid
+        - name: inspectionId
+          required: true
+          in: path
+          description: inspection id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInspection"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Updated ProductInspection
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductInspection"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteProductInspection
+      summary: Delete a product inspection
+      description: Deletes a product inspection
+      tags:
+        - ProductInspection
+      parameters:
+        - name: instructionId
+          required: true
+          in: path
+          description: instruction id
+          schema:
+            type: string
+            format: uuid
+        - name: inspectionId
+          required: true
+          in: path
+          description: inspection id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /v1/revisions:
     get:
       operationId: listRevisions
