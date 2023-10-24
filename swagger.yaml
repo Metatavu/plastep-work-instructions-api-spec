@@ -2124,9 +2124,8 @@ components:
           type: boolean
           description: Is product inspection template active
         inspectionInterval:
-          type: number
-          format: float
-          description: Product inspection template object
+          type: integer
+          description: Product inspection interval in minutes
         fields:
           type: array
           items:
