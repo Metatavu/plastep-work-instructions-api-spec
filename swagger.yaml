@@ -2109,6 +2109,11 @@ components:
 
     ProductInspectionTemplate:
       type: object
+      description: Product inspection template object
+      required:
+        - inspectionInterval
+        - fields
+        - isActive
       properties:
         id:
           type: string
@@ -2132,12 +2137,10 @@ components:
 
     ProductInspectionTemplateField:
       type: object
+      description: Product inspection template field object
+      required:
+        - measurementNumber
       properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          description: Product inspection template field id in UUID format
         unit:
           type: string
           description: Product inspection template field unit
@@ -2160,7 +2163,14 @@ components:
     ProductInspection:
       type: object
       description: Product inspection object
+      required:
+        - fields
       properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Product inspection id in UUID format
         fields:
           type: array
           items:
@@ -2173,11 +2183,6 @@ components:
       type: object
       description: Product inspection field object
       properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          description: Product inspection field id in UUID format
         unit:
           type: string
           description: Product inspection field unit
