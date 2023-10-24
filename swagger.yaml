@@ -1016,7 +1016,6 @@ paths:
           schema:
             type: integer
         - name: instructionId
-          required: true
           in: query
           description: instruction id
           schema:
