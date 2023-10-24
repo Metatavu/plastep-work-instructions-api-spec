@@ -1979,9 +1979,8 @@ components:
           items:
             $ref: "#/components/schemas/ProductInspectionField"
           description: List of product inspection fields
-        externalLink:
-          type: string
-          description: Product inspection external link
+        metadata:
+          $ref: "#/components/schemas/Metadata"
 
     ProductInspectionField:
       type: object
