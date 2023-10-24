@@ -997,7 +997,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/instructions/{instructionId}/productInspections:
+  /v1/productInspections:
     get:
       operationId: listProductInspections
       summary: Lists product inspections
@@ -1017,11 +1017,26 @@ paths:
             type: integer
         - name: instructionId
           required: true
-          in: path
+          in: query
           description: instruction id
           schema:
             type: string
             format: uuid
+        - name: productCode
+          in: query
+          description: Filter by product code (strict) if instructionId filter is not present
+          schema:
+            type: string
+        - name: productName
+          in: query
+          description: Filter by product name (match by start of the name) if instructionId filter is not present
+          schema:
+            type: string
+        - name: result
+          in: query
+          description: Filter by result
+          schema:
+            $ref: "#/components/schemas/InspectionResult"
       responses:
         "200":
           description: List of product inspections
@@ -1049,14 +1064,6 @@ paths:
       description: Create a product inspection.
       tags:
         - ProductInspections
-      parameters:
-        - name: instructionId
-          required: true
-          in: path
-          description: instruction id
-          schema:
-            type: string
-            format: uuid
       requestBody:
         content:
           application/json:
@@ -1077,7 +1084,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /v1/instructions/{instructionId}/productInspections/{inspectionId}:
+  /v1/productInspections/{inspectionId}:
     get:
       operationId: findProductInspection
       summary: Find product inspection
@@ -1085,13 +1092,6 @@ paths:
       tags:
         - ProductInspections
       parameters:
-        - name: instructionId
-          required: true
-          in: path
-          description: instruction id
-          schema:
-            type: string
-            format: uuid
         - name: inspectionId
           required: true
           in: path
@@ -1112,47 +1112,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-    put:
-      operationId: updateProductInspection
-      summary: Update a product inspection
-      description: Updates a product inspection
-      tags:
-        - ProductInspections
-      parameters:
-        - name: instructionId
-          required: true
-          in: path
-          description: instruction id
-          schema:
-            type: string
-            format: uuid
-        - name: inspectionId
-          required: true
-          in: path
-          description: inspection id
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ProductInspection"
-        description: Payload
-        required: true
-      responses:
-        "200":
-          description: Updated ProductInspection
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ProductInspection"
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
     delete:
       operationId: deleteProductInspection
       summary: Delete a product inspection
@@ -1160,13 +1119,6 @@ paths:
       tags:
         - ProductInspection
       parameters:
-        - name: instructionId
-          required: true
-          in: path
-          description: instruction id
-          schema:
-            type: string
-            format: uuid
         - name: inspectionId
           required: true
           in: path
@@ -2129,13 +2081,26 @@ components:
           format: uuid
           readOnly: true
           description: Product inspection id in UUID format
+        instructionId:
+          type: string
+          format: uuid
+          description: Instruction id in UUID format
         fields:
           type: array
           items:
             $ref: "#/components/schemas/ProductInspectionField"
           description: List of product inspection fields
+        result:
+          $ref: "#/components/schemas/InspectionResult"
         metadata:
           $ref: "#/components/schemas/Metadata"
+
+    InspectionResult:
+      type: string
+      description: Inspection result
+      enum:
+        - PASSED
+        - FAILED
 
     ProductInspectionField:
       type: object
@@ -2163,5 +2128,7 @@ components:
           type: number
           format: float
           description: Product inspection field max tolerance
+        result:
+          $ref: "#/components/schemas/InspectionResult"
         metadata:
           $ref: "#/components/schemas/Metadata"
