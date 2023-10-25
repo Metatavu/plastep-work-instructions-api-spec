@@ -1048,7 +1048,7 @@ paths:
             type: integer
         - name: instructionId
           in: query
-          description: instruction id
+          description: instruction id filter. If this filter is applied, productCode and productName filters are ignored
           schema:
             type: string
             format: uuid
@@ -1159,7 +1159,7 @@ paths:
       summary: Delete a product inspection
       description: Deletes a product inspection
       tags:
-        - ProductInspection
+        - ProductInspections
       parameters:
         - name: inspectionId
           required: true
@@ -2180,5 +2180,3 @@ components:
         result:
           readOnly: true
           $ref: "#/components/schemas/InspectionResult"
-        metadata:
-          $ref: "#/components/schemas/Metadata"
