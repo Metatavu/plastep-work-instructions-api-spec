@@ -1067,6 +1067,18 @@ paths:
           description: Filter by result
           schema:
             $ref: "#/components/schemas/InspectionResult"
+        - name: submittedBefore
+          in: query
+          description: Filter by date before
+          schema:
+            type: string
+            format: date-time
+        - name: submittedAfter
+          in: query
+          description: Filter by date after
+          schema:
+            type: string
+            format: date-time
       responses:
         "200":
           description: List of product inspections
