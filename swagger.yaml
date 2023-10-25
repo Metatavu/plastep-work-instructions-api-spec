@@ -2137,7 +2137,12 @@ components:
     ProductInspectionField:
       type: object
       description: Product inspection field object
+      required:
+        - cycleTime
       properties:
+        cycleTime:
+          type: integer
+          description: Product inspection field cycle time
         unit:
           type: string
           description: Product inspection field unit
