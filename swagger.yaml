@@ -123,6 +123,29 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/system/syncStatus:
+    get:
+      operationId: getSyncStatus
+      summary: Gets the status of synchronization process of the work sets and phases
+      description: Gets the status of synchronization process of the work sets and phases
+      tags:
+        - System
+      responses:
+        "200":
+          description: Status of sync process
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SyncStatus"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   /v1/workSets:
     get:
       operationId: listWorkSets
@@ -480,227 +503,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-
-  /v1/workSets/{workSetId}/phases/{phaseId}/machineCards:
-    get:
-      operationId: listMachineCards
-      summary: Lists machine cards.
-      description: Lists machine cards.
-      tags:
-        - MachineCards
-      parameters:
-        - name: workSetId
-          required: true
-          in: path
-          description: workSet ID
-          schema:
-            type: string
-            format: uuid
-        - name: phaseId
-          required: true
-          in: path
-          description: phase id
-          schema:
-            type: string
-            format: uuid
-        - name: machineId
-          required: false
-          in: query
-          description: machine ID
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "200":
-          description: List of machine cards
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/MachineCard"
-          headers:
-            X-Total-Count:
-              schema:
-                type: integer
-                format: int64
-              description: Total count of machine cards with given filters.
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    post:
-      operationId: createMachineCard
-      summary: Create a machine card.
-      description: Creates a new machine card.
-      tags:
-        - MachineCards
-      parameters:
-        - name: workSetId
-          required: true
-          in: path
-          description: workSet ID
-          schema:
-            type: string
-            format: uuid
-        - name: phaseId
-          required: true
-          in: path
-          description: phase id
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/MachineCard"
-        description: Payload
-        required: true
-      responses:
-        "200":
-          description: Created MachineCard
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/MachineCard"
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  /v1/workSets/{workSetId}/phases/{phaseId}/machineCards/{machineCardId}:
-    get:
-      operationId: findMachineCard
-      summary: Find a machine card.
-      description: Finds a machine card by id.
-      tags:
-        - MachineCards
-      parameters:
-        - name: workSetId
-          required: true
-          in: path
-          description: workSet ID
-          schema:
-            type: string
-            format: uuid
-        - name: phaseId
-          required: true
-          in: path
-          description: phase id
-          schema:
-            type: string
-            format: uuid
-        - name: machineCardId
-          required: true
-          in: path
-          description: machine card id
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "200":
-          description: MachineCard
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/MachineCard"
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    put:
-      operationId: updateMachineCard
-      summary: Update a machine card.
-      description: Updates a machine card
-      tags:
-        - MachineCards
-      parameters:
-        - name: workSetId
-          required: true
-          in: path
-          description: workSet ID
-          schema:
-            type: string
-            format: uuid
-        - name: phaseId
-          required: true
-          in: path
-          description: phase id
-          schema:
-            type: string
-            format: uuid
-        - name: machineCardId
-          required: true
-          in: path
-          description: machine card id
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/MachineCard"
-        description: Payload
-        required: true
-      responses:
-        "200":
-          description: Updated MachineCard
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/MachineCard"
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    delete:
-      operationId: deleteMachineCard
-      summary: Delete a machine card.
-      description: Deletes a machine card.
-      tags:
-        - MachineCards
-      parameters:
-        - name: workSetId
-          required: true
-          in: path
-          description: workSet ID
-          schema:
-            type: string
-            format: uuid
-        - name: phaseId
-          required: true
-          in: path
-          description: phase id
-          schema:
-            type: string
-            format: uuid
-        - name: machineCardId
-          required: true
-          in: path
-          description: machine card id
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "204":
-          description: Success
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
   /v1/products:
     get:
       operationId: listProducts
@@ -725,9 +527,14 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: search
+        - name: productCode
           in: query
-          description: Filter by search term. At this stage this works only with product code
+          description: Filter instructions by product code (strict filter)
+          schema:
+            type: string
+        - name: productName
+          in: query
+          description: Filter instructions by product name (filters by partial match of the name start)
           schema:
             type: string
       responses:
@@ -882,9 +689,31 @@ paths:
           description: Page size. Defaults to 10
           schema:
             type: integer
-        - name: productId
+        - name: modifiedBefore
           in: query
-          description: Filter by product id
+          description: Filter instructions modified before given date
+          schema:
+            type: string
+            format: date-time
+        - name: modifiedAfter
+          in: query
+          description: Filter instructions modified after given date
+          schema:
+            type: string
+            format: date-time
+        - name: productCode
+          in: query
+          description: Filter instructions by product code (strict filter)
+          schema:
+            type: string
+        - name: productName
+          in: query
+          description: Filter instructions by product name (filters by partial match of the name start)
+          schema:
+            type: string
+        - name: responsiblePersonId
+          in: query
+          description: Filter instructions by work responsible person id
           schema:
             type: string
             format: uuid
@@ -1042,7 +871,7 @@ paths:
             type: integer
         - name: instructionId
           in: query
-          description: Instruction id
+          description: Instruction id, if provided, productCode and productName filters are ignored
           schema:
             type: string
             format: uuid
@@ -1051,6 +880,28 @@ paths:
           description: Filter by status
           schema:
             $ref: "#/components/schemas/RevisionStatus"
+        - name: productCode
+          in: query
+          description: Filter by product code (strict) if instructionId filter is not present
+          schema:
+            type: string
+        - name: productName
+          in: query
+          description: Filter by product name (match by start of the name) if instructionId filter is not present
+          schema:
+            type: string
+        - name: before
+          in: query
+          description: Filter by date before
+          schema:
+            type: string
+            format: date-time
+        - name: after
+          in: query
+          description: Filter by date after
+          schema:
+            type: string
+            format: date-time
       responses:
         "200":
           description: List of revisions
@@ -1290,158 +1141,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/machineCardPropertyKeys:
-    get:
-      operationId: listMachineCardPropertyKeys
-      summary: Lists machine card property keys.
-      description: Lists machine card property keys.
-      tags:
-        - MachineCardPropertyKeys
-      parameters:
-        - name: page
-          in: query
-          description: Page number. Defaults to 0
-          schema:
-            type: integer
-        - name: pageSize
-          in: query
-          description: Page size. Defaults to 10
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: List of machine card property keys
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/MachineCardPropertyKey"
-          headers:
-            Total-Count:
-              schema:
-                type: integer
-                format: int64
-              description: Total count of machine card property keys with given filters.
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    post:
-      operationId: createMachineCardPropertyKey
-      summary: Create a machine card property key.
-      description: Creates a new machine card property key.
-      tags:
-        - MachineCardPropertyKeys
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/MachineCardPropertyKey"
-        description: Payload
-        required: true
-      responses:
-        "200":
-          description: Created machine card property key
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/MachineCardPropertyKey"
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  /v1/machineCardPropertyKeys/{id}:
-    get:
-      operationId: findMachineCardPropertyKey
-      summary: Find a machine card property key.
-      description: Finds a machine card property key by id.
-      tags:
-        - MachineCardPropertyKeys
-      parameters:
-        - name: id
-          required: true
-          in: path
-          description: machine card property key id
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "200":
-          description: machine card property key
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/MachineCardPropertyKey"
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    put:
-      operationId: updateMachineCardPropertyKey
-      summary: Update a machine card property key.
-      description: Updates a machine card property key.
-      tags:
-        - MachineCardPropertyKeys
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/MachineCardPropertyKey"
-        description: Payload
-        required: true
-      parameters:
-        - name: id
-          required: true
-          in: path
-          description: machine card property key id
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "200":
-          description: Updated machine card property key
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/MachineCardPropertyKey"
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    delete:
-      operationId: deleteMachineCardPropertyKey
-      summary: Delete a machine card property key.
-      description: Deletes a machine card property key.
-      tags:
-        - MachineCardPropertyKeys
-      parameters:
-        - name: id
-          required: true
-          in: path
-          description: machine card property key id
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "204":
-          description: Success
-        "default":
-          description: Invalid request was sent to the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
   /v1/machines:
     get:
       operationId: listMachines
@@ -1531,7 +1230,7 @@ paths:
             type: integer
         - name: productId
           in: query
-          description: Filter by product id
+          description: Filter by product id, if used, other product-related filters are ignored
           schema:
             type: string
             format: uuid
@@ -1546,6 +1245,33 @@ paths:
           description: Include comments from sub products of product with given ID. ProductId must exist. RevisionId cannot be used with this filter.
           schema:
             type: boolean
+        - name: createdBefore
+          in: query
+          description: Filter comments created before given date
+          schema:
+            type: string
+            format: date-time
+        - name: createdAfter
+          in: query
+          description: Filter comments created after given date
+          schema:
+            type: string
+            format: date-time
+        - name: commentType
+          in: query
+          description: Filter by comment type
+          schema:
+            $ref: "#/components/schemas/CommentType"
+        - name: productCode
+          in: query
+          description: Filter instructions by product code (strict filter), applied only if productId is missing
+          schema:
+            type: string
+        - name: productName
+          in: query
+          description: Filter instructions by product name (filters by partial match of the name start), applied only if productId is missing
+          schema:
+            type: string
       responses:
         "200":
           description: List of comments
@@ -1892,62 +1618,6 @@ components:
         metadata:
           $ref: "#/components/schemas/Metadata"
 
-    MachineCardPropertyKey:
-      type: object
-      description: Single property of machine card
-      required:
-        - name
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          description: Property id in UUID format
-        name:
-          type: string
-          description: Name of the property, should be unique
-
-    MachineCardPropertyValue:
-      type: object
-      description: Machine card's property key with value
-      required:
-        - machineCardPropertyKeyId
-        - value
-      properties:
-        machineCardPropertyKeyId:
-          type: string
-          format: uuid
-          description: Property id in UUID format
-        value:
-          type: string
-          description: Value of the property
-
-    MachineCard:
-      type: object
-      description: Machine card object
-      required:
-        - phaseId
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          description: Machine card id in UUID format
-        phaseId:
-          type: string
-          format: uuid
-          description: Phase id in UUID format
-        machineId:
-          type: string
-          format: uuid
-          description: Machine id in UUID format
-        propertyValues:
-          type: array
-          items:
-            $ref: "#/components/schemas/MachineCardPropertyValue"
-        metadata:
-          $ref: "#/components/schemas/Metadata"
-
     Machine:
       type: object
       description: Machine object
@@ -1975,6 +1645,7 @@ components:
         - productId
         - author
         - text
+        - commentType
       properties:
         id:
           type: string
@@ -1989,6 +1660,13 @@ components:
           type: string
           format: uuid
           description: Revision id in UUID format
+        parentId:
+          type: string
+          format: uuid
+          description: Parent comment id in UUID format if any
+        commentType:
+          description: Comment type
+          $ref: "#/components/schemas/CommentType"
         author:
           type: string
           description: Author of the comment
@@ -1997,6 +1675,13 @@ components:
           description: Comment text
         metadata:
           $ref: "#/components/schemas/Metadata"
+
+    CommentType:
+      type: string
+      description: Sync enum
+      enum:
+        - COMMENT
+        - REPLY
 
     CopyPhase:
       type: object
@@ -2011,19 +1696,6 @@ components:
         newPhase:
           $ref: "#/components/schemas/Phase"
 
-    CopyMachinesCard:
-      type: object
-      required:
-        - originalMachineCardId
-        - newMachineCard
-      properties:
-        originalMachineCardId:
-          type: string
-          format: uuid
-          description: Original machine card id in UUID format
-        newMachineCard:
-          $ref: "#/components/schemas/MachineCard"
-
     CopyContentChanges:
       type: object
       properties:
@@ -2032,8 +1704,32 @@ components:
           items:
             $ref: "#/components/schemas/CopyPhase"
           description: List of new phases
-        newMachineCards:
-          type: array
-          items:
-            $ref: "#/components/schemas/CopyMachinesCard"
-          description: List of new machine cards
+
+    SyncType:
+      type: string
+      description: Sync enum
+      enum:
+        - MACHINES
+        - PRODUCTS
+        - PHASES
+
+    SyncStatus:
+      type: object
+      properties:
+        syncType:
+          $ref: "#/components/schemas/SyncType"
+        inProgress:
+          type: boolean
+          description: Is sync in progress
+        startedAt:
+          type: string
+          format: date-time
+          description: Date time when sync was started
+        finishedAt:
+          type: string
+          format: date-time
+          description: Date time when sync was finished
+        syncNumber:
+          type: integer
+          format: int32
+          description: Sync number
