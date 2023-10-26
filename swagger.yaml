@@ -851,6 +851,332 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/instructions/{instructionId}/productInspectionTemplates:
+    get:
+      operationId: listProductInspectionTemplates
+      summary: Lists templates of product inspection forms
+      description: Lists templates of product inspection forms
+      tags:
+        - ProductInspectionTemplates
+      parameters:
+        - name: instructionId
+          required: true
+          in: path
+          description: instruction id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of templates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductInspectionTemplate"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of form templates with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createInspectionFormTemplate
+      summary: Create a template for product inspection form.
+      description: Create a template for product inspection form.
+      tags:
+        - ProductInspectionTemplates
+      parameters:
+        - name: instructionId
+          required: true
+          in: path
+          description: instruction id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInspectionTemplate"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created Phase
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductInspectionTemplate"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/instructions/{instructionId}/productInspectionTemplates/{templateId}:
+    get:
+      operationId: findProductInspectionTemplate
+      summary: Find product inspection form template.
+      description: Finds product inspection form template by id.
+      tags:
+        - ProductInspectionTemplates
+      parameters:
+        - name: instructionId
+          required: true
+          in: path
+          description: instruction id
+          schema:
+            type: string
+            format: uuid
+        - name: templateId
+          required: true
+          in: path
+          description: template id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: ProductInspectionTemplate
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductInspectionTemplate"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      operationId: updateProductInspectionTemplate
+      summary: Update a product inspection form template.
+      description: Updates a product inspection form template
+      tags:
+        - ProductInspectionTemplates
+      parameters:
+        - name: instructionId
+          required: true
+          in: path
+          description: instruction id
+          schema:
+            type: string
+            format: uuid
+        - name: templateId
+          required: true
+          in: path
+          description: template id
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInspectionTemplate"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Updated ProductInspectionTemplate
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductInspectionTemplate"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteProductInspectionTemplate
+      summary: Delete a product inspection form template.
+      description: Deletes a product inspection form template.
+      tags:
+        - ProductInspectionTemplates
+      parameters:
+        - name: instructionId
+          required: true
+          in: path
+          description: instruction id
+          schema:
+            type: string
+            format: uuid
+        - name: templateId
+          required: true
+          in: path
+          description: template id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/productInspections:
+    get:
+      operationId: listProductInspections
+      summary: Lists product inspections
+      description: Lists product inspections
+      tags:
+        - ProductInspections
+      parameters:
+        - name: page
+          in: query
+          description: Page number. Defaults to 0
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size. Defaults to 10
+          schema:
+            type: integer
+        - name: instructionId
+          in: query
+          description: instruction id filter. If this filter is applied, productCode and productName filters are ignored
+          schema:
+            type: string
+            format: uuid
+        - name: productCode
+          in: query
+          description: Filter by product code (strict) if instructionId filter is not present
+          schema:
+            type: string
+        - name: productName
+          in: query
+          description: Filter by product name (match by start of the name) if instructionId filter is not present
+          schema:
+            type: string
+        - name: result
+          in: query
+          description: Filter by result
+          schema:
+            $ref: "#/components/schemas/InspectionResult"
+        - name: submittedBefore
+          in: query
+          description: Filter by date before
+          schema:
+            type: string
+            format: date-time
+        - name: submittedAfter
+          in: query
+          description: Filter by date after
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: List of product inspections
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductInspection"
+          headers:
+            X-Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of product inspections with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createProductInspection
+      summary: Create a product inspection.
+      description: Create a product inspection.
+      tags:
+        - ProductInspections
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInspection"
+        description: Payload
+        required: true
+      responses:
+        "200":
+          description: Created ProductInspection
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductInspection"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/productInspections/{inspectionId}:
+    get:
+      operationId: findProductInspection
+      summary: Find product inspection
+      description: Finds product inspection by id
+      tags:
+        - ProductInspections
+      parameters:
+        - name: inspectionId
+          required: true
+          in: path
+          description: inspection id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: ProductInspection
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductInspection"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteProductInspection
+      summary: Delete a product inspection
+      description: Deletes a product inspection
+      tags:
+        - ProductInspections
+      parameters:
+        - name: inspectionId
+          required: true
+          in: path
+          description: inspection id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /v1/revisions:
     get:
       operationId: listRevisions
@@ -1733,3 +2059,124 @@ components:
           type: integer
           format: int32
           description: Sync number
+
+    ProductInspectionTemplate:
+      type: object
+      description: Product inspection template object
+      required:
+        - inspectionInterval
+        - fields
+        - isActive
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Product inspection template id in UUID format
+        isActive:
+          type: boolean
+          description: Is product inspection template active
+        inspectionInterval:
+          type: integer
+          description: Product inspection interval in minutes
+        fields:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductInspectionTemplateField"
+          description: List of product inspection template fields
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    ProductInspectionTemplateField:
+      type: object
+      description: Product inspection template field object
+      required:
+        - measurementNumber
+      properties:
+        unit:
+          type: string
+          description: Product inspection template field unit
+        minTolerance:
+          type: number
+          format: float
+          description: Product inspection template field min tolerance
+        maxTolerance:
+          type: number
+          format: float
+          description: Product inspection template field max tolerance
+        measurementNumber:
+          type: integer
+          description: Product inspection template field measurement number
+        nominalNumber:
+          type: number
+          format: float
+          description: Product inspection template field nominal number
+
+    ProductInspection:
+      type: object
+      description: Product inspection object
+      required:
+        - fields
+        - instructionId
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Product inspection id in UUID format
+        instructionId:
+          type: string
+          format: uuid
+          description: Instruction id in UUID format
+        fields:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductInspectionField"
+          description: List of product inspection fields
+        result:
+          readOnly: true
+          $ref: "#/components/schemas/InspectionResult"
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+
+    InspectionResult:
+      type: string
+      description: Inspection result
+      enum:
+        - PASSED
+        - FAILED
+
+    ProductInspectionField:
+      type: object
+      description: Product inspection field object
+      required:
+        - cycleTime
+      properties:
+        cycleTime:
+          type: integer
+          description: Product inspection field cycle time
+        unit:
+          type: string
+          description: Product inspection field unit
+        measurementNumber:
+          type: integer
+          description: Product inspection field measurement number
+        nominalNumber:
+          type: number
+          format: float
+          description: Product inspection field nominal number
+        measurement:
+          type: number
+          format: float
+          description: Product inspection field measurement
+        minTolerance:
+          type: number
+          format: float
+          description: Product inspection field min tolerance
+        maxTolerance:
+          type: number
+          format: float
+          description: Product inspection field max tolerance
+        result:
+          readOnly: true
+          $ref: "#/components/schemas/InspectionResult"
