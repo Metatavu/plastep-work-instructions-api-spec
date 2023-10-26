@@ -688,7 +688,13 @@ paths:
             format: uuid
       responses:
         "200":
-          description: Instruction request created
+          description: Instruction request confirmation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InstructionRequestResponse"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -1766,3 +1772,14 @@ components:
           type: integer
           format: int32
           description: Sync number
+
+    InstructionRequestResponse:
+      type: object
+      properties:
+        receivingAddresses:
+          type: string
+          description: List of email addresses to which the instruction request was sent
+        sendAt:
+          type: string
+          format: date-time
+          description: Date time when request was sent
