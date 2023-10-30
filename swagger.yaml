@@ -2116,6 +2116,9 @@ components:
         inspectionInterval:
           type: integer
           description: Product inspection interval in minutes
+        attachmentUrl:
+          type: string
+          description: Product inspection template attachment url
         fields:
           type: array
           items:
