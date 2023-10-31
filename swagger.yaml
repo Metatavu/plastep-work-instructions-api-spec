@@ -690,7 +690,8 @@ paths:
           in: query
           description: Filter by work number
           schema:
-            type: string
+            type: integer
+            format: int64
         - name: page
           in: query
           description: Page number. Defaults to 0
@@ -2389,6 +2390,7 @@ components:
         - machineFaultErrors
         - measurementErrors
         - visualErrors
+        - otherErrors
       properties:
         id:
           type: string
@@ -2446,5 +2448,10 @@ components:
           readOnly: true
           format: float
           description: Other errors in percentage
+        totalErrorsPercentage:
+          type: number
+          readOnly: true
+          format: float
+          description: Total errors in percentage
         metadata:
           $ref: "#/components/schemas/Metadata"
