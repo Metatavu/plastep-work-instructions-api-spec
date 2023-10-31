@@ -671,6 +671,153 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/products/{productId}/wreckageReports:
+    get:
+      operationId: listWreckageReports
+      summary: Lists wreckage reports.
+      description: Lists wreckage reports sorted by latest work numbers.
+      tags:
+        - ProductWreckageReports
+      parameters:
+        - name: productId
+          required: true
+          in: path
+          description: product id
+          schema:
+            type: string
+            format: uuid
+        - name: workNumber
+          in: query
+          description: Filter by work number
+          schema:
+            type: integer
+            format: int64
+        - name: page
+          in: query
+          description: Page number. Defaults to 0
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size. Defaults to 10
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Wreckage reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WreckageReport"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      operationId: createWreckageReport
+      summary: Create a wreckage report.
+      description: Creates a new wreckage report.
+      tags:
+        - ProductWreckageReports
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WreckageReport"
+        description: Payload
+        required: true
+      parameters:
+        - name: productId
+          required: true
+          in: path
+          description: product id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: created Wreckage Report
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WreckageReport"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/products/{productId}/wreckageReports/{wreckageReportId}:
+    get:
+      operationId: findWreckageReport
+      summary: Find a wreckage report.
+      description: Finds a wreckage report by id.
+      tags:
+        - ProductWreckageReports
+      parameters:
+        - name: productId
+          required: true
+          in: path
+          description: product id
+          schema:
+            type: string
+            format: uuid
+        - name: wreckageReportId
+          required: true
+          in: path
+          description: wreckage report id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Phase
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WreckageReport"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: deleteWreckageReport
+      summary: Delete a wreckage report.
+      description: Deletes a wreckage report.
+      tags:
+        - ProductWreckageReports
+      parameters:
+        - name: productId
+          required: true
+          in: path
+          description: product id
+          schema:
+            type: string
+            format: uuid
+        - name: wreckageReportId
+          required: true
+          in: path
+          description: wreckage report id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Success
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   /v1/products/{productId}/requestInstruction:
     post:
       operationId: requestInstruction
@@ -2231,3 +2378,80 @@ components:
           type: string
           format: date-time
           description: Date time when request was sent
+
+    WreckageReport:
+      type: object
+      description: Product wreckage report for one work number
+      required:
+        - workNumber
+        - productId
+        - totalAmount
+        - upstartErrors
+        - machineFaultErrors
+        - measurementErrors
+        - visualErrors
+        - otherErrors
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Wreckage report id in UUID format
+        workNumber:
+          type: integer
+          format: int64
+          description: Work number
+        productId:
+          type: string
+          format: uuid
+          description: Product id in UUID format
+        totalAmount:
+          type: integer
+          description: Total amount of products
+        upstartErrors:
+          type: integer
+          description: Errors during machine start
+        upstartErrorsPercentage:
+          type: number
+          readOnly: true
+          format: float
+          description: Errors during machine start in percentage
+        machineFaultErrors:
+          type: integer
+          description: Machine fault errors
+        machineFaultErrorsPercentage:
+          type: number
+          readOnly: true
+          format: float
+          description: Machine fault errors in percentage
+        measurementErrors:
+          type: integer
+          description: Measurement errors
+        measurementErrorsPercentage:
+          type: number
+          readOnly: true
+          format: float
+          description: Measurement errors in percentage
+        visualErrors:
+          type: integer
+          description: Visual errors
+        visualErrorsPercentage:
+          type: number
+          readOnly: true
+          format: float
+          description: Visual errors in percentage
+        otherErrors:
+          type: integer
+          description: Other errors
+        otherErrorsPercentage:
+          type: number
+          readOnly: true
+          format: float
+          description: Other errors in percentage
+        totalErrorsPercentage:
+          type: number
+          readOnly: true
+          format: float
+          description: Total errors in percentage
+        metadata:
+          $ref: "#/components/schemas/Metadata"
