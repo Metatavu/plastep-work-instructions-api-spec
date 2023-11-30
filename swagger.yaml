@@ -29,6 +29,12 @@ paths:
       description: Starts the synchronization process of the products
       tags:
         - System
+      parameters:
+        - name: forceSync
+          in: query
+          required: false
+          schema:
+            type: boolean
       responses:
         "200":
           description: Sync started
@@ -59,6 +65,12 @@ paths:
       description: Starts the synchronization process of the machines
       tags:
         - System
+      parameters:
+        - name: forceSync
+          in: query
+          required: false
+          schema:
+            type: boolean
       responses:
         "200":
           description: Sync started
@@ -98,6 +110,11 @@ paths:
           required: true
           schema:
             type: string
+        - name: forceSync
+          in: query
+          required: false
+          schema:
+            type: boolean
       tags:
         - System
       responses:
