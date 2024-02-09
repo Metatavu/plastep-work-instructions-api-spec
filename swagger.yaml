@@ -2322,6 +2322,7 @@ components:
       required:
         - fields
         - instructionId
+        - cycleTime
       properties:
         id:
           type: string
@@ -2332,6 +2333,9 @@ components:
           type: string
           format: uuid
           description: Instruction id in UUID format
+        cycleTime:
+          type: integer
+          description: Product inspection field cycle time
         fields:
           type: array
           items:
@@ -2353,12 +2357,7 @@ components:
     ProductInspectionField:
       type: object
       description: Product inspection field object
-      required:
-        - cycleTime
       properties:
-        cycleTime:
-          type: integer
-          description: Product inspection field cycle time
         unit:
           type: string
           description: Product inspection field unit
